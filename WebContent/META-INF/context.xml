@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context docBase="zerojiaowu">
+	<!-- qx 可對這個應用程式限制可瀏覽的範圍, 正式上線時應註解掉 -->
+	<!-- qx <Valve className="org.apache.catalina.valves.RemoteAddrValve" allow="127.0.0.1" deny="" /> -->
+	<!-- qx <Resource name="postgres" auth="Container" type="javax.sql.DataSource" maxActive="50" maxIdle="50" maxWait="100" username="postgres" password="ashs" driverClassName="org.postgresql.Driver" removeAbandoned="true" removeAbandonedTimeout="60" logAbandoned="true" url="jdbc:postgresql://127.0.0.1:5432/ZeroJudge" 
+		/> -->
+	<Resource name="mysql" auth="Container" type="javax.sql.DataSource" maxActive="50" maxIdle="50" maxWait="100" username="root" password="DBPASSWORD" driverClassName="com.mysql.jdbc.Driver" removeAbandoned="true" removeAbandonedTimeout="60" logAbandoned="true"
+		url="jdbc:mysql://127.0.0.1:3306/zerojiaowu?useUnicode=true&amp;characterEncoding=UTF-8" />
+</Context>
