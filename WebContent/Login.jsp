@@ -10,37 +10,41 @@
 
 </head>
 <body>
-	<div id="main">
-		<jsp:include page="includes/Header.jsp" />
-		<div id="panel">
-			<br />
-			<div class="right">
+	<jsp:include page="includes/Header.jsp" />
+	<div class="row">
+		<div class="col-md-4"></div>
+		<div class="col-md-4">
+			<form class="form-horizontal" role="form" action="Login"
+				method="post">
 				<h3>確認您的身份</h3>
 				<p>請輸入您的學號以及身份證字號</p>
-				<p style="font-size: large; font-weight: bold; color: red;">${sessionScope.LoginMessage}</p>
-				<form action="Login" method="post">
-					<h4>
-						<label for="item_a">學號:</label>
-					</h4>
-					<p class="input">
-						<input name="account" type="password" id="account" size="50" />
-					</p>
-					<h4>
-						<label for="item_b">身份證字號:</label>
-					</h4>
-					<p class="input">
-						<input name="passwd" type="password" id="passwd" size="50" />
-					</p>
-					<p class="button">
-						<button name="submit" type="submit">送出</button>
-					</p>
-				</form>
-			</div>
-			<!--            <a
-                href="https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=156955164629.apps.googleusercontent.com&redirect_uri=http://apps.nknush.kh.edu.tw/ZeroJiaowu/OAuth2Callback&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email">以Google帳戶登入</a>
- -->
+				<div class="form-group">
+
+					<label for="inputEmail3" class="col-sm-3 control-label">
+						學號: </label>
+					<div class="col-sm-9">
+						<input name="account" type="password" class="form-control" />
+					</div>
+				</div>
+				<div class="form-group">
+
+					<label for="inputPassword3" class="col-sm-3 control-label">
+						身份證字號: </label>
+					<div class="col-sm-9">
+						<input name="passwd" type="password" class="form-control" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-default">登入</button>
+					</div>
+				</div>
+			</form>
 		</div>
-		<jsp:include page="includes/Footer.jsp" />
+		<div class="col-md-4"></div>
 	</div>
+
+	<jsp:include page="includes/Footer.jsp" />
+
 </body>
 </html>

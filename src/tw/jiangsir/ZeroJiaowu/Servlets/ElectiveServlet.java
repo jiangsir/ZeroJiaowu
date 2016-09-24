@@ -46,10 +46,10 @@ public class ElectiveServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-		CurrentUser onlineUser = new SessionScope(session).getOnlineUser();
+		CurrentUser currentUser = new SessionScope(session).getCurrentUser();
 		int jobid = Integer.parseInt(request.getParameter("jobid"));
 		ArrayList<Job> jobs = new ArrayList<Job>();
-		if (!ElectiveServlet.isAccessible(onlineUser, jobid)) {
+		if (!ElectiveServlet.isAccessible(currentUser, jobid)) {
 			Message message = new Message();
 			message.setType(Message.getMessageType_ALERT());
 			message.setTitle("您可能進到不屬於您的選課作業。");
@@ -62,9 +62,9 @@ public class ElectiveServlet extends HttpServlet {
 		}
 		// UserBean userBean = new UserBean(session_account);
 
-		Elective elective = new ElectiveDAO().getElectiveByJobidAccount(jobid, onlineUser.getAccount());
+		Elective elective = new ElectiveDAO().getElectiveByJobidAccount(jobid, currentUser.getAccount());
 		Job job = new JobDAO().getJobById(jobid);
-		job.setCurrentUser(onlineUser);
+		job.setCurrentUser(currentUser);
 		System.out.println("elective=" + elective);
 
 		if (elective != null) {
@@ -146,12 +146,12 @@ public class ElectiveServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-		CurrentUser onlineUser = new SessionScope(session).getOnlineUser();
+		CurrentUser currentUser = new SessionScope(session).getCurrentUser();
 		// String session_account = (String) session
 		// .getAttribute("session_account");
 		Elective newelective = new Elective();
 		newelective.setJobid(Integer.parseInt(request.getParameter("jobid")));
-		newelective.setAccount(onlineUser.getAccount());
+		newelective.setAccount(currentUser.getAccount());
 		newelective.setCourse1(request.getParameter("course1"));
 		newelective.setCourse2(request.getParameter("course2"));
 		newelective.setCourse3(request.getParameter("course3"));
@@ -195,7 +195,7 @@ public class ElectiveServlet extends HttpServlet {
 			return;
 		}
 		newelective.setId(id);
-		newelective.setCurrentUser(onlineUser);
+		newelective.setCurrentUser(currentUser);
 		Message message = new Message();
 		message.setType(Message.getMessageType_ALERT());
 		message.setTitle("恭喜您完成志願選填作業！");
@@ -203,7 +203,7 @@ public class ElectiveServlet extends HttpServlet {
 		// .getParameter("jobid")), currentUser.getAccount()).getResult());
 		message.setPlainText(newelective.getResult());
 
-		onlineUser.doLogout();
+		currentUser.doLogout();
 
 		HashMap<String, String> links = new HashMap<String, String>();
 		links.put("./", "回首頁");

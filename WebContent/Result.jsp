@@ -166,11 +166,10 @@
 <jsp:setProperty name="jobBean" property="jobid" value="${param.jobid}" />
  --%>
 <body>
-	<div id="main">
-		<jsp:include page="includes/Header.jsp" />
-		<div id="content">
-			<div class="article">
-				<!-- 				<h2>
+	<jsp:include page="includes/Header.jsp" />
+	<div class="container">
+
+		<!-- 				<h2>
 					<span id="ReFenfa"
 						style="text-decoration: underline; cursor: pointer;">[清除所有分發結果]</span>
 					| <span id="DoFenfa"
@@ -180,79 +179,212 @@
 						id="status"></span>
 				</h2>
  -->
-				<div>
-					<span id="ReFenfa" type="button">[清除所有分發結果]</span> | <span
-						id="DoFenfa" type="button" title="進行分發，並且會清除以前分發的結果。保障名額不受影響。">[進行分發]</span><img
-						src="./images/waiting.gif" id="waiting" style="display: none"></img><span
-						id="status"></span> | <a
-						href="./Export.api?target=getResults_XLS&jobid=${job.id }"
-						type="button">匯出分發結果 xls</a>
+
+		<div class="btn-group" role="group" aria-label="...">
+			<div class="btn btn-default" id="ReFenfa">清除所有分發結果</div>
+			<div class="btn btn-default" id="DoFenfa"
+				title="進行分發，並且會清除以前分發的結果。保障名額不受影響。">
+				進行分發 <img src="./images/waiting.gif" id="waiting"
+					style="display: none"></img> <span id="status"></span>
+			</div>
+			<div class="btn btn-default">
+				<a href="./Export.api?target=getResults_XLS&jobid=${job.id }"
+					type="button">匯出分發結果 xls</a>
+			</div>
+		</div>
+		<%-- 		<div>
+			<span id="ReFenfa" type="button">[清除所有分發結果]</span> | <span
+				id="DoFenfa" type="button" title="進行分發，並且會清除以前分發的結果。保障名額不受影響。">[進行分發]</span><img
+				src="./images/waiting.gif" id="waiting" style="display: none"></img><span
+				id="status"></span> | <a
+				href="./Export.api?target=getResults_XLS&jobid=${job.id }"
+				type="button">匯出分發結果 xls</a>
+		</div>
+ --%>
+		<h3>基本資訊：</h3>
+		<div>
+			符合選填資格人數(規則：${job.allowedusers})：人共
+			${fn:length(jobBean.allowedUsers)} 位<br /> 已完成選填者： 共
+			${fn:length(jobBean.finishElectives)} 位。 <br /> <br />
+		</div>
+		<h3>選填狀況:</h3>
+		<div class="panel-group" id="accordion" role="tablist"
+			aria-multiselectable="true">
+			<div class="panel panel-default">
+				<div class="panel-heading" role="tab" id="headingOne">
+					<h4 class="panel-title">
+						<a role="button" data-toggle="collapse" data-parent="#accordion"
+							href="#collapseOne" aria-expanded="true"
+							aria-controls="collapseOne"> 舊生保留名額(共
+							${fn:length(reservedselections)} 人) </a>
+					</h4>
 				</div>
-				<h3>基本資訊：</h3>
-				<div>
-					符合選填資格人數(規則：${job.allowedusers})：人共
-					${fn:length(jobBean.allowedUsers)} 位<br /> 已完成選填者： 共
-					${fn:length(jobBean.finishElectives)} 位。 <br /> <br />
-				</div>
-				<h3>選填結果:</h3>
-				<div>
-					<br /> 舊生保留名額(共 ${fn:length(reservedselections)} 人) -- <span
-						id="open_reserved">[展開]</span><span id="hide_reserved">[隱藏]</span>
-					<div id="reservedselections" class="namebox">
-						<c:forEach var="reservedselection" items="${reservedselections}">
+				<div id="collapseOne" class="panel-collapse collapse in"
+					role="tabpanel" aria-labelledby="headingOne">
+					<div class="panel-body">
+						<div id="reservedselections" class="namebox">
+							<c:forEach var="reservedselection" items="${reservedselections}">
           ${reservedselection.account}(${reservedselection.user.username},${reservedselection.user.comment}${reservedselection.user.number}): ${reservedselection.selected}<br />
-						</c:forEach>
+							</c:forEach>
+						</div>
 					</div>
-					<br /> 已經完成選填者(共 ${fn:length(submittedelectives)} 人)：<span
-						id="open_submitted">[展開]</span><span id="hide_submitted">[隱藏]</span><br />
-					<div id="submittedelectives" class="namebox">
-						<c:forEach var="submittedelective" items="${submittedelectives}">
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading" role="tab" id="headingTwo">
+					<h4 class="panel-title">
+						<a class="collapsed" role="button" data-toggle="collapse"
+							data-parent="#accordion" href="#collapseTwo"
+							aria-expanded="false" aria-controls=" collapseTwo">
+							已經完成選填，但尚未分發完成者(共 ${fn:length(submittedelectives)} 人)： </a>
+					</h4>
+				</div>
+				<div id="collapseTwo" class="panel-collapse collapse"
+					role="tabpanel" aria-labelledby="headingTwo">
+					<div class="panel-body">
+
+						<div class="namebox">
+							<c:forEach var="submittedelective" items="${submittedelectives}">
           ${submittedelective.account}(${submittedelective.user.username},${submittedelective.user.comment}${submittedelective.user.number}): 1.${submittedelective.course1}, 2.${submittedelective.course2}, 3.${submittedelective.course3}, 4.${submittedelective.course4}, ${submittedelective.submittime}<br />
-						</c:forEach>
+							</c:forEach>
+						</div>
 					</div>
-					<table>
-						<tr>
-							<td>序號</td>
-							<td style="width: 12%">學生</td>
-							<td>第一志願</td>
-							<td>第二志願</td>
-							<td>第三志願</td>
-							<td>第四志願</td>
-							<td>submittime</td>
-							<td style="width: 10%">option</td>
-						</tr>
-						<c:forEach var="nonfenfaedelective" items="${nonfenfaedelectives}"
-							varStatus="varstatus">
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading" role="tab" id="headingThree">
+					<h4 class="panel-title">
+						<a class="collapsed" role="button" data-toggle="collapse"
+							data-parent="#accordion" href="#collapseThree"
+							aria-expanded="false" aria-controls="collapseThree">
+							尚未分發的學生名單（若已進行分發，仍在這裡，代表無法分發。）(共
+							${fn:length(nonfenfaedelectives)} 人)：</a>
+					</h4>
+				</div>
+				<div id="collapseThree" class="panel-collapse collapse"
+					role="tabpanel" aria-labelledby="headingThree">
+					<div class="panel-body">
+						<table class="table table-hover">
 							<tr>
-								<td>${varstatus.count }</td>
-								<td>${nonfenfaedelective.account}:${nonfenfaedelective.user.username}<br />(${nonfenfaedelective.user.comment}
-									${nonfenfaedelective.user.number})
-								</td>
-								<td>${nonfenfaedelective.course1}</td>
-								<td>${nonfenfaedelective.course2}</td>
-								<td>${nonfenfaedelective.course3}</td>
-								<td>${nonfenfaedelective.course4}</td>
-								<td><c:if
-										test="${nonfenfaedelective.course1!='' || nonfenfaedelective.course2!='' || nonfenfaedelective.course3!='' || nonfenfaedelective.course4!='' }">${nonfenfaedelective.submittime}</c:if>
-								</td>
-								<td><c:if test="${nonfenfaedelective.lock==1}">
-										<a href="" electiveid="${nonfenfaedelective.id }"
-											id="doUnlock" title="解鎖"><img
-											src="images/lock_${nonfenfaedelective.lock}.jpg"
-											height="18px"></img></a>
-									</c:if> <c:if test="${nonfenfaedelective.lock==0}">
-										<a href="" electiveid="${nonfenfaedelective.id }" id="doLock">鎖定</a>
-									</c:if> ｜ <a href="" id="deleteElective"
-									electiveid="${nonfenfaedelective.id}"
-									title="刪除：填錯的、不該填的、另有安排者。">刪除</a></td>
+								<td>序號</td>
+								<td style="width: 12%">學生</td>
+								<td>第一志願</td>
+								<td>第二志願</td>
+								<td>第三志願</td>
+								<td>第四志願</td>
+								<td>submittime</td>
+								<td style="width: 10%">option</td>
 							</tr>
-						</c:forEach>
-					</table>
+							<c:forEach var="nonfenfaedelective"
+								items="${nonfenfaedelectives}" varStatus="varstatus">
+								<tr>
+									<td>${varstatus.count }</td>
+									<td>${nonfenfaedelective.account}:${nonfenfaedelective.user.username}<br />(${nonfenfaedelective.user.comment}
+										${nonfenfaedelective.user.number})
+									</td>
+									<td>${nonfenfaedelective.course1}</td>
+									<td>${nonfenfaedelective.course2}</td>
+									<td>${nonfenfaedelective.course3}</td>
+									<td>${nonfenfaedelective.course4}</td>
+									<td><c:if
+											test="${nonfenfaedelective.course1!='' || nonfenfaedelective.course2!='' || nonfenfaedelective.course3!='' || nonfenfaedelective.course4!='' }">${nonfenfaedelective.submittime}</c:if>
+									</td>
+									<td><c:if test="${nonfenfaedelective.lock==1}">
+											<a href="" electiveid="${nonfenfaedelective.id }"
+												id="doUnlock" title="解鎖"><img
+												src="images/lock_${nonfenfaedelective.lock}.jpg"
+												height="18px"></img></a>
+										</c:if> <c:if test="${nonfenfaedelective.lock==0}">
+											<a href="" electiveid="${nonfenfaedelective.id }" id="doLock">鎖定</a>
+										</c:if> ｜ <a href="" id="deleteElective"
+										electiveid="${nonfenfaedelective.id}"
+										title="刪除：填錯的、不該填的、另有安排者。">刪除</a></td>
+								</tr>
+							</c:forEach>
+						</table>
+
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading" role="tab" id="heading4">
+					<h4 class="panel-title">
+						<a class="collapsed" role="button" data-toggle="collapse"
+							data-parent="#accordion" href="#collapse4" aria-expanded="false"
+							aria-controls=" collapse4">未上網選課共
+							${fn:length(job.nonSubmitUsers)}人，名單</a>
+					</h4>
+				</div>
+				<div id="collapse4" class="panel-collapse collapse" role="tabpanel"
+					aria-labelledby="heading4">
+					<div class="panel-body">
+						<div class="namebox">
+							<c:forEach var="nonSubmitUser" items="${job.nonSubmitUsers}">
+                        ${nonSubmitUser.value.account},${nonSubmitUser.value.username},${nonSubmitUser.value.comment},${nonSubmitUser.value.number}<br />
+							</c:forEach>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<%-- 		<div>
+			<br /> 舊生保留名額(共 ${fn:length(reservedselections)} 人) -- <span
+				id="open_reserved">[展開]</span><span id="hide_reserved">[隱藏]</span>
+			<div id="reservedselections" class="namebox">
+				<c:forEach var="reservedselection" items="${reservedselections}">
+          ${reservedselection.account}(${reservedselection.user.username},${reservedselection.user.comment}${reservedselection.user.number}): ${reservedselection.selected}<br />
+				</c:forEach>
+			</div>
+			<br /> 已經完成選填者(共 ${fn:length(submittedelectives)} 人)：<span
+				id="open_submitted">[展開]</span><span id="hide_submitted">[隱藏]</span><br />
+			<div id="submittedelectives" class="namebox">
+				<c:forEach var="submittedelective" items="${submittedelectives}">
+          ${submittedelective.account}(${submittedelective.user.username},${submittedelective.user.comment}${submittedelective.user.number}): 1.${submittedelective.course1}, 2.${submittedelective.course2}, 3.${submittedelective.course3}, 4.${submittedelective.course4}, ${submittedelective.submittime}<br />
+				</c:forEach>
+			</div>
+			<table>
+				<tr>
+					<td>序號</td>
+					<td style="width: 12%">學生</td>
+					<td>第一志願</td>
+					<td>第二志願</td>
+					<td>第三志願</td>
+					<td>第四志願</td>
+					<td>submittime</td>
+					<td style="width: 10%">option</td>
+				</tr>
+				<c:forEach var="nonfenfaedelective" items="${nonfenfaedelectives}"
+					varStatus="varstatus">
+					<tr>
+						<td>${varstatus.count }</td>
+						<td>${nonfenfaedelective.account}:${nonfenfaedelective.user.username}<br />(${nonfenfaedelective.user.comment}
+							${nonfenfaedelective.user.number})
+						</td>
+						<td>${nonfenfaedelective.course1}</td>
+						<td>${nonfenfaedelective.course2}</td>
+						<td>${nonfenfaedelective.course3}</td>
+						<td>${nonfenfaedelective.course4}</td>
+						<td><c:if
+								test="${nonfenfaedelective.course1!='' || nonfenfaedelective.course2!='' || nonfenfaedelective.course3!='' || nonfenfaedelective.course4!='' }">${nonfenfaedelective.submittime}</c:if>
+						</td>
+						<td><c:if test="${nonfenfaedelective.lock==1}">
+								<a href="" electiveid="${nonfenfaedelective.id }" id="doUnlock"
+									title="解鎖"><img
+									src="images/lock_${nonfenfaedelective.lock}.jpg" height="18px"></img></a>
+							</c:if> <c:if test="${nonfenfaedelective.lock==0}">
+								<a href="" electiveid="${nonfenfaedelective.id }" id="doLock">鎖定</a>
+							</c:if> ｜ <a href="" id="deleteElective"
+							electiveid="${nonfenfaedelective.id}" title="刪除：填錯的、不該填的、另有安排者。">刪除</a></td>
+					</tr>
+				</c:forEach>
+			</table>
 
 
-					<br /> 無法分發的學生名單(共 ${fn:length(nonfenfaedelectives)} 人)： <span
-						id="open_nonfenfa">[展開]</span><span id="hide_nonfenfa">[隱藏]</span><br />
-					<%-- 					<div id="nonfenfaelectives" class="namebox">
+			<br /> 無法分發的學生名單(共 ${fn:length(nonfenfaedelectives)} 人)： <span
+				id="open_nonfenfa">[展開]</span><span id="hide_nonfenfa">[隱藏]</span><br />
+								<div id="nonfenfaelectives" class="namebox">
 						<c:forEach var="nonfenfaedelective" items="${nonfenfaedelectives}">
 		${nonfenfaedelective.account}(${nonfenfaedelective.user.username}-${nonfenfaedelective.user.comment} ${nonfenfaedelective.user.number}): 1th.${nonfenfaedelective.course1}, 2th.${nonfenfaedelective.course2}, 3th.${nonfenfaedelective.course3}, 4th.${nonfenfaedelective.course4}
 		<c:if
@@ -260,29 +392,31 @@
 							<br />
 						</c:forEach>
 					</div>
- --%>
-				</div>
-				<h2>分發結果：</h2>
-				<%-- 					<jsp:useBean id="userBean" class="tw.zerojudge.Beans.UserBean" />
- --%>
-				<h3>未上網選課共 ${fn:length(job.nonSubmitUsers)}人，名單</h3>
-				<div class="namebox">
-					<c:forEach var="nonSubmitUser" items="${job.nonSubmitUsers}">
-                        ${nonSubmitUser.value.account},${nonSubmitUser.value.username},${nonSubmitUser.value.comment},${nonSubmitUser.value.number}<br />
-					</c:forEach>
 
-				</div>
+		</div>
+ --%>
+		<h2>分發結果：</h2>
+		<%-- 					<jsp:useBean id="userBean" class="tw.zerojudge.Beans.UserBean" />
+ --%>
 
-				<c:forEach var="course" items="${courses}">
-					<div style="margin-top: 2em;">
-						<h3 style="display: inline;">${course.type}-${course.name},共
-							${fn:length(course.electives)}人 | ${course.capacity}人</h3>
-						<a
+		<c:forEach var="course" items="${courses}">
+			<%-- 			<div style="margin-top: 2em;">
+				<h3 style="display: inline;">${course.type}-${course.name},共
+					${fn:length(course.electives)}人 | ${course.capacity}人 <a
+						href="./Export.api?target=getStudents_CSV&courseid=${course.id}"
+						type="button">下載CSV </a>
+				</h3>
+			</div> --%>
+			<div class="panel panel-info" id="coursebox">
+				<div class="panel-heading">
+					<h3 class="panel-title">${course.type}-${course.name},共
+						${fn:length(course.electives)}人 | ${course.capacity}人 <a
 							href="./Export.api?target=getStudents_CSV&courseid=${course.id}"
 							type="button">下載CSV </a>
-					</div>
-
-					<table>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table table-hover">
 						<tr>
 							<td>index</td>
 							<td>nth</td>
@@ -318,18 +452,14 @@
 							</tr>
 						</c:forEach>
 					</table>
-					<%-- 					<div class="namebox" id="electives">
-						<c:forEach var="elective" items="${course.electives}">
- ${elective.nth}th,${elective.account},${elective.user.username},${elective.user.comment},${elective.user.number},${elective.course1},${elective.course2},${elective.course3},${elective.course4}<br />
-						</c:forEach>
-					</div>
- --%>
-					<hr></hr>
-				</c:forEach>
-
+				</div>
 			</div>
-		</div>
-		<jsp:include page="includes/Footer.jsp" />
+
+			<hr></hr>
+		</c:forEach>
+
+
 	</div>
+	<jsp:include page="includes/Footer.jsp" />
 </body>
 </html>

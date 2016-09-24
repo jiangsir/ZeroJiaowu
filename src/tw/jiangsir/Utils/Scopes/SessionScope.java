@@ -30,7 +30,7 @@ public class SessionScope implements Serializable {
 	private Locale session_locale = new Locale("zh", "tw");
 	private String session_useragent = "";
 	private HashMap<String, String> session_requestheaders = new HashMap<String, String>();
-	private CurrentUser onlineUser = null;
+	private CurrentUser currentUser = null;
 	private long idle = 0;
 	private ArrayList<String> histories = new ArrayList<String>() {
 		/**
@@ -63,21 +63,15 @@ public class SessionScope implements Serializable {
 
 		this.session = session;
 		this.setSessionid(session.getId());
-		this.setSession_ipset(
-				(ArrayList<IpAddress>) session.getAttribute("session_ipset"));
-		this.setSession_privilege((LinkedHashSet<String>) session
-				.getAttribute("session_privilege"));
+		this.setSession_ipset((ArrayList<IpAddress>) session.getAttribute("session_ipset"));
+		this.setSession_privilege((LinkedHashSet<String>) session.getAttribute("session_privilege"));
 		this.setSession_locale((Locale) session.getAttribute("session_locale"));
-		this.setSession_useragent(
-				(String) session.getAttribute("session_useragent"));
-		this.setSession_requestheaders((HashMap<String, String>) session
-				.getAttribute("session_requestheaders"));
-		this.setOnlineUser(session.getAttribute("onlineUser"));
+		this.setSession_useragent((String) session.getAttribute("session_useragent"));
+		this.setSession_requestheaders((HashMap<String, String>) session.getAttribute("session_requestheaders"));
+		this.setCurrentUser(session.getAttribute("currentUser"));
 		// this.setReturnPages(session.getAttribute("returnPages"));
-		this.setHistories(
-				(ArrayList<String>) session.getAttribute("histories"));
-		this.setIdle(
-				System.currentTimeMillis() - session.getLastAccessedTime());
+		this.setHistories((ArrayList<String>) session.getAttribute("histories"));
+		this.setIdle(System.currentTimeMillis() - session.getLastAccessedTime());
 	}
 
 	public String getSessionid() {
@@ -169,8 +163,7 @@ public class SessionScope implements Serializable {
 		return session_requestheaders;
 	}
 
-	public void setSession_requestheaders(
-			HashMap<String, String> session_requestheaders) {
+	public void setSession_requestheaders(HashMap<String, String> session_requestheaders) {
 		if (session_requestheaders == null) {
 			return;
 		}
@@ -183,22 +176,22 @@ public class SessionScope implements Serializable {
 	 * 
 	 * @return
 	 */
-	public CurrentUser getOnlineUser() {
-		return onlineUser;
+	public CurrentUser getCurrentUser() {
+		return currentUser;
 	}
 
-	public void setOnlineUser(Object onlineUser) {
-		if (onlineUser == null || !(onlineUser instanceof CurrentUser)) {
+	public void setCurrentUser(Object currentUser) {
+		if (currentUser == null || !(currentUser instanceof CurrentUser)) {
 			return;
 		}
-		this.removeOnlineUser(); // 先移除再加入。 上線人數才會正確
-		session.setAttribute("onlineUser", onlineUser);
-		this.onlineUser = (CurrentUser) onlineUser;
+		this.removeCurrentUser(); // 先移除再加入。 上線人數才會正確
+		session.setAttribute("currentUser", currentUser);
+		this.currentUser = (CurrentUser) currentUser;
 	}
 
-	public void removeOnlineUser() {
-		session.removeAttribute("onlineUser");
-		this.onlineUser = null;
+	public void removeCurrentUser() {
+		session.removeAttribute("currentUser");
+		this.currentUser = null;
 	}
 
 	// @SuppressWarnings("unchecked")
@@ -254,8 +247,7 @@ public class SessionScope implements Serializable {
 	@SuppressWarnings("unchecked")
 	public ArrayList<String> getHistories() {
 		if (session != null && session.getAttribute("histories") != null) {
-			this.histories = (ArrayList<String>) session
-					.getAttribute("histories");
+			this.histories = (ArrayList<String>) session.getAttribute("histories");
 		}
 		return this.histories;
 	}
@@ -269,23 +261,15 @@ public class SessionScope implements Serializable {
 	}
 
 	public void addHistory(String servletPath, String querystring) {
-		if (servletPath
-				.startsWith(LoginServlet.class.getAnnotation(WebServlet.class)
-						.urlPatterns()[0])
-				|| servletPath.equals(LogoutServlet.class
-						.getAnnotation(WebServlet.class).urlPatterns()[0])
-				|| servletPath.equals(ShowSessionsServlet.class
-						.getAnnotation(WebServlet.class).urlPatterns()[0])
-				|| servletPath.startsWith("/Update")
-				|| servletPath.startsWith("/Insert")
-				|| servletPath.startsWith("/api/")
-				|| servletPath.endsWith(".ajax")
-				|| servletPath.endsWith(".api")) {
+		if (servletPath.startsWith(LoginServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0])
+				|| servletPath.equals(LogoutServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0])
+				|| servletPath.equals(ShowSessionsServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0])
+				|| servletPath.startsWith("/Update") || servletPath.startsWith("/Insert")
+				|| servletPath.startsWith("/api/") || servletPath.endsWith(".ajax") || servletPath.endsWith(".api")) {
 			return;
 		}
 		ArrayList<String> histories = this.getHistories();
-		String history = servletPath
-				+ (querystring == null ? "" : "?" + querystring);
+		String history = servletPath + (querystring == null ? "" : "?" + querystring);
 		System.out.println("histories1=" + histories);
 		if (!history.equals(histories.get(0))) {
 			histories.remove(histories.size() - 1);
@@ -322,12 +306,10 @@ public class SessionScope implements Serializable {
 		// }
 		buffer.append("sessionid=" + this.getSessionid() + "\n");
 		buffer.append("session_ipset=" + this.getSession_ipset() + "\n");
-		buffer.append("onlineUser=" + this.getOnlineUser() + "\n");
+		buffer.append("currentUser=" + this.getCurrentUser() + "\n");
 		buffer.append("hiestories=" + this.getHistories() + "\n");
-		buffer.append(
-				"session_useragent=" + this.getSession_useragent() + "\n");
-		buffer.append("session_requestheaders="
-				+ this.getSession_requestheaders() + "\n");
+		buffer.append("session_useragent=" + this.getSession_useragent() + "\n");
+		buffer.append("session_requestheaders=" + this.getSession_requestheaders() + "\n");
 
 		return buffer.toString();
 	}

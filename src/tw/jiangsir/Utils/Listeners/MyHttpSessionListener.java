@@ -57,7 +57,7 @@ public class MyHttpSessionListener implements javax.servlet.http.HttpSessionList
 		}
 		HttpSession session = event.getSession();
 		String sessionid = session.getId();
-		CurrentUser currentUser = new SessionScope(session).getOnlineUser();
+		CurrentUser currentUser = new SessionScope(session).getCurrentUser();
 		currentUser.doLogout();
 		synchronized (ENV.OnlineSessions) {
 			ENV.OnlineSessions.remove(sessionid);

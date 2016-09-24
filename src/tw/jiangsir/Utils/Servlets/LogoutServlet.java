@@ -7,7 +7,7 @@ import javax.servlet.http.*;
 import tw.jiangsir.Utils.CurrentUser;
 import tw.jiangsir.Utils.Scopes.SessionScope;
 
-@WebServlet(urlPatterns = { "/Logout" })
+@WebServlet(urlPatterns = {"/Logout"})
 public class LogoutServlet extends HttpServlet {
 
 	/**
@@ -15,12 +15,12 @@ public class LogoutServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
 		// CurrentUser currentUser = SessionFactory.getCurrentUser(session);
-		CurrentUser onlineUser = new SessionScope(session).getOnlineUser();
-		onlineUser.doLogout();
+		CurrentUser currentUser = new SessionScope(session).getCurrentUser();
+		currentUser.doLogout();
 		response.sendRedirect("./");
 	}
 }

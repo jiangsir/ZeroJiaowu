@@ -31,7 +31,7 @@ public class ExceptionFilter implements Filter {
 			tracestring.append(trace[i] + "\n");
 		}
 		HttpSession session = request.getSession();
-		CurrentUser currentUser = new SessionScope(session).getOnlineUser();
+		CurrentUser currentUser = new SessionScope(session).getCurrentUser();
 		if (currentUser == null) {
 			throw new javax.servlet.ServletException("session 無效，請稍候再試。 系統管理員敬上");
 		}

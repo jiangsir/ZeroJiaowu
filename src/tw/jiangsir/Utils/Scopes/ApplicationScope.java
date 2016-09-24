@@ -27,7 +27,7 @@ public class ApplicationScope {
 	private static String version = null;
 	private static boolean isReleased = false;
 	private static ConcurrentHashMap<String, HttpSession> onlineSessions = new ConcurrentHashMap<String, HttpSession>();
-	private static TreeMap<String, CurrentUser> onlineUsers = new TreeMap<String, CurrentUser>();
+	private static TreeMap<String, CurrentUser> currentUsers = new TreeMap<String, CurrentUser>();
 	private static HashMap<String, HttpServlet> urlpatterns = new HashMap<String, HttpServlet>();
 	private static HashMap<User.ROLE, HashSet<Class<? extends HttpServlet>>> roleMap = new HashMap<User.ROLE, HashSet<Class<? extends HttpServlet>>>();
 	private static TreeMap<Long, Thread> threadPool = new TreeMap<Long, Thread>();
@@ -54,13 +54,13 @@ public class ApplicationScope {
 		ApplicationScope.servletContext.setAttribute("onlineSessions", onlineSessions);
 	}
 
-	public static TreeMap<String, CurrentUser> getOnlineUsers() {
-		return onlineUsers;
+	public static TreeMap<String, CurrentUser> getCurrentUsers() {
+		return currentUsers;
 	}
 
-	public static void setOnlineUsers(TreeMap<String, CurrentUser> onlineUsers) {
-		ApplicationScope.onlineUsers = onlineUsers;
-		ApplicationScope.servletContext.setAttribute("onlineUsers", onlineUsers);
+	public static void setCurrentUsers(TreeMap<String, CurrentUser> currentUsers) {
+		ApplicationScope.currentUsers = currentUsers;
+		ApplicationScope.servletContext.setAttribute("currentUsers", currentUsers);
 	}
 
 	public static HashMap<String, HttpServlet> getUrlpatterns() {

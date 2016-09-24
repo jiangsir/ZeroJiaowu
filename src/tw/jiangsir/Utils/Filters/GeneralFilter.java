@@ -4,13 +4,9 @@ import java.io.IOException;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.*;
-
-import tw.jiangsir.Utils.AlertBean;
-import tw.jiangsir.Utils.AlertDispatcher;
 import tw.jiangsir.Utils.Mailer;
-import tw.jiangsir.Utils.MyProperties;
 
-@WebFilter(urlPatterns = { "/*" })
+@WebFilter(urlPatterns = {"/*"})
 public class GeneralFilter implements Filter {
 
 	public void init(FilterConfig config) throws ServletException {
@@ -20,14 +16,13 @@ public class GeneralFilter implements Filter {
 	/**
 	 * GeneralFilter 過濾全部的頁面，包含 .jsp, .css, doGET, doPOST 等
 	 */
-	public void doFilter(ServletRequest req, ServletResponse res,
-			FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		HttpSession session = request.getSession();
 		String servletPath = request.getServletPath();
-		String qs = request.getQueryString() == null ? "" : "?"
-				+ request.getQueryString();
+		String qs = request.getQueryString() == null ? "" : "?" + request.getQueryString();
 
 		String requestURI = request.getRequestURI();
 		requestURI = requestURI.substring(requestURI.lastIndexOf('/') + 1);
@@ -40,11 +35,8 @@ public class GeneralFilter implements Filter {
 
 		// String session_account = (String) session
 		// .getAttribute("session_account");
-		if ("GET".equals(request.getMethod())
-				&& !(servletPath + qs).equals(session
-						.getAttribute("returnPage"))
-				&& !servletPath.equals("/OAuth2Callback")
-				&& !servletPath.equals("/GoogleLogin")
+		if ("GET".equals(request.getMethod()) && !(servletPath + qs).equals(session.getAttribute("returnPage"))
+				&& !servletPath.equals("/OAuth2Callback") && !servletPath.equals("/GoogleLogin")
 				&& !servletPath.equals("/Login")) {
 			session.setAttribute("returnPage", servletPath + qs);
 		}
@@ -64,21 +56,18 @@ public class GeneralFilter implements Filter {
 		// return;
 		// }
 
-		MyProperties myprop = new MyProperties();
-		if (!"yes".equals(myprop.getProperty("IS_SYSTEMOPEN"))) {
-			new AlertDispatcher(request, response).forward(new AlertBean(myprop
-					.getProperty("IS_SYSTEMOPEN")));
-			return;
-		}
+		// MyProperties myprop = new MyProperties();
+		// if (!"yes".equals(myprop.getProperty("IS_SYSTEMOPEN"))) {
+		// new AlertDispatcher(request, response).forward(new AlertBean(myprop
+		// .getProperty("IS_SYSTEMOPEN")));
+		// return;
+		// }
 
 		Runtime runtime = Runtime.getRuntime();
 		if (runtime.freeMemory() < runtime.totalMemory() / 10) {
-			String message = "runtime.freeMemory()=" + runtime.freeMemory()
-					/ 1024 / 1024 + "MB, runtime.totalMemory()="
-					+ runtime.totalMemory() / 1024 / 1024 + "MB \n"
-					+ servletPath + qs;
-			Thread mailer = new Thread(new Mailer(
-					"jiangsir@tea.nknush.kh.edu.tw", "記憶體即將耗盡", message));
+			String message = "runtime.freeMemory()=" + runtime.freeMemory() / 1024 / 1024 + "MB, runtime.totalMemory()="
+					+ runtime.totalMemory() / 1024 / 1024 + "MB \n" + servletPath + qs;
+			Thread mailer = new Thread(new Mailer("jiangsir@tea.nknush.kh.edu.tw", "記憶體即將耗盡", message));
 			mailer.start();
 		}
 

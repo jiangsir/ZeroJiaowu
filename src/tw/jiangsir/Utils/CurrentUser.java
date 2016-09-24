@@ -1,12 +1,21 @@
 package tw.jiangsir.Utils;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
+
+import tw.jiangsir.Utils.Scopes.ApplicationScope;
 import tw.jiangsir.ZeroJiaowu.Objects.User;
 
-public class CurrentUser extends User {
+public class CurrentUser extends User implements Serializable, HttpSessionBindingListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8554868356236234282L;
 	/**
 	 * 紀錄該 SessionUser 所設定的 locale 語系。
 	 */
@@ -247,5 +256,27 @@ public class CurrentUser extends User {
 			return true;
 		}
 		return false;
+	}
+
+	public boolean getIsNullUser() {
+		if (this.getId().equals(new User().getId()) && this.getAccount().equals(new User().getAccount())) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void valueBound(HttpSessionBindingEvent event) {
+		synchronized (ApplicationScope.getCurrentUsers()) {
+			ApplicationScope.getCurrentUsers().put(event.getSession().getId(), this);
+		}
+		ApplicationScope.getOnlineSessions().put(event.getSession().getId(), event.getSession());
+	}
+
+	@Override
+	public void valueUnbound(HttpSessionBindingEvent event) {
+		synchronized (ApplicationScope.getCurrentUsers()) {
+			ApplicationScope.getCurrentUsers().remove(event.getSession().getId());
+		}
 	}
 }

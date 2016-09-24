@@ -105,9 +105,7 @@ public class User {
 	 */
 	public static boolean islegalAccount(String account) {
 		if (account != null && account.length() >= 3
-				&& (account.matches("[a-zA-Z]+\\w+")
-						|| account.matches("[0-9]{7}")
-						|| account.matches("[0-9]{6}"))) {
+				&& (account.matches("[a-zA-Z]+\\w+") || account.matches("[0-9]{7}") || account.matches("[0-9]{6}"))) {
 			return true;
 		}
 		return false;
@@ -218,12 +216,15 @@ public class User {
 		return new JobDAO().getVisibleJobs(this.account);
 	}
 
-	public boolean isNullUser() {
-		if (this.getId().equals(new User().getId())
-				&& this.getAccount().equals(new User().getAccount())) {
+	public boolean getIsNullUser() {
+		if (this.getId().equals(new User().getId()) && this.getAccount().equals(new User().getAccount())) {
 			return true;
 		}
 		return false;
+	}
+
+	public boolean getIsAdmin() {
+		return (this.getRole() == ROLE.MANAGER || this.getRole() == ROLE.DEBUGGER);
 	}
 
 }

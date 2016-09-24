@@ -26,6 +26,14 @@ public class Elective {
 	private Integer jobid = 0;
 	@Persistent(name = "account")
 	private String account = "";
+	@Persistent(name = "courseid1")
+	private Integer courseid1 = 0;
+	@Persistent(name = "courseid2")
+	private Integer courseid2 = 0;
+	@Persistent(name = "courseid3")
+	private Integer courseid3 = 0;
+	@Persistent(name = "courseid4")
+	private Integer courseid4 = 0;
 	@Persistent(name = "course1")
 	private String course1 = "";
 	@Persistent(name = "course2")

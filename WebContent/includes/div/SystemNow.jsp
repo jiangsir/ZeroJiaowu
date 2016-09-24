@@ -29,6 +29,6 @@
 </script>
 
 
-<div style="color: #FF0000; text-align: center; font-size: 1.5em; padding: 0.3em;">
+<div style="color: #FF0000; font-size: 1.5em; padding: 0.3em;">
 	目前系統時間：<span id="now">${now.time}</span>
 </div>

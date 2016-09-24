@@ -42,11 +42,10 @@
 </script>
 </head>
 <jsp:useBean id="date" class="java.util.Date" /><body>
-	<div id="main">
-		<jsp:include page="includes/Header.jsp" />
-		<div id="content"></div>
+	<jsp:include page="includes/Header.jsp" />
+	<div class="container">
 		<c:forEach var="job" items="${jobs}">
-			<div id="panel">
+			<div id="row">
 				<div class="h1">
 					<h1>『${job.title}』</h1>
 				</div>
@@ -59,7 +58,7 @@
 					<c:when test="${date.time > job.finishtime.time}"> 本選填作業已經結束！ </c:when>
 					<c:when
 						test="${date.time > job.starttime.time && date.time < job.finishtime.time}">
-						<div class="left">
+						<div class="col-md-5">
 							<c:choose>
 								<c:when test="${elective.isReserved==true}"> 您是舊生保障名額，因此不需再選填一次。<br />
 								</c:when>
@@ -70,9 +69,8 @@
  --%>
 									<%-- 									<jsp:setProperty name="courseBean" property="jobid"
 										value="${job.id}" />
- --%>            ${sessionScope.onlineUser.username} 您好！ <br />
-									<br />
-									<br />
+ --%>
+									<h3>${sessionScope.currentUser.username}您好！</h3>
 									<p>
 										請選擇您想選修的課程 <br /> ※ 注意： 不同的志願序請勿選取相同課程。這樣並不會增加中簽的機率。
 										請依照順序選擇，請小心選擇確認之後就無法更改囉！<br />
@@ -90,16 +88,21 @@
 												</c:forEach>
 											</select>
 										</c:forEach>
-										<input name="jobid" type="hidden" value="${job.id}" />
-										<p class="button">
+										<!-- 										<p class="button">
 											<button name="submit" type="submit">確認！</button>
 										</p>
+ -->
+										<div>
+											<br /> <br /> <input name="jobid" type="hidden"
+												value="${job.id}" />
+											<button type="submit" class="btn btn-success">確認</button>
+										</div>
 									</form>
 									<br />
 								</c:otherwise>
 							</c:choose>
 						</div>
-						<div class="right">
+						<div class="col-md-7">
 							<c:forEach var="course" items="${job.courses}">
 								<div name="course" id="${course.name}"
 									style="display: none; float: left;">
@@ -116,7 +119,7 @@
 				</c:choose>
 			</div>
 		</c:forEach>
-		<jsp:include page="includes/Footer.jsp" />
 	</div>
+	<jsp:include page="includes/Footer.jsp" />
 </body>
 </html>

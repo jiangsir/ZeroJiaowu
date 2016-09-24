@@ -65,7 +65,7 @@ public class InitializedListener implements ServletContextListener {
 		// ENV.setMyPropertiesPath(ENV.APP_REAL_PATH +
 		// "META-INF/properties.xml");
 		// ENV.resource = ResourceBundle.getBundle("resource");
-		context.setAttribute("OnlineUsers", new Hashtable<String, HttpSession>());
+		context.setAttribute("CurrentUsers", new Hashtable<String, HttpSession>());
 		// new DataBase(event).initConnection(context);
 
 		new UserDAO().insertInitUsers();

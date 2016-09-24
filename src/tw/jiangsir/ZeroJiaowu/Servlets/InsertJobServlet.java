@@ -48,32 +48,30 @@ public class InsertJobServlet extends HttpServlet implements IAccessFilter {
 		try {
 			jobid = new JobDAO().insert(job);
 
-			String coursecsv = request.getParameter("coursecsv");
-			CourseDAO courseDao = new CourseDAO();
-			for (Course course : this.parseCourseCSV(coursecsv, jobid)) {
-				courseDao.insert(course);
+			// String coursecsv = request.getParameter("coursecsv");
+			// CourseDAO courseDao = new CourseDAO();
+			// for (Course course : this.parseCourseCSV(coursecsv, jobid)) {
+			// courseDao.insert(course);
+			// }
+			String[] coursenames = request.getParameterValues("coursename");
+			String[] coursecontents = request.getParameterValues("coursecontent");
+			String[] teachers = request.getParameterValues("teacher");
+			String[] coursecapacitys = request.getParameterValues("coursecapacity");
+			for (int i = 0; i < coursenames.length; i++) {
+				Course newcourse = new Course();
+				newcourse.setName(coursenames[i]);
+				newcourse.setContent(coursecontents[i]);
+				newcourse.setCapacity(Integer.valueOf(coursecapacitys[i]));
+				newcourse.setTeacher(teachers[i]);
+				newcourse.setJobid(jobid);
+				int courseid;
+				try {
+					courseid = new CourseDAO().insert(newcourse);
+					newcourse.setId(courseid);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
-			// String[] coursenames = request.getParameterValues("coursename");
-			// String[] coursecontents =
-			// request.getParameterValues("coursecontent");
-			// String[] teachers = request.getParameterValues("teacher");
-			// String[] coursecapacitys =
-			// request.getParameterValues("coursecapacity");
-			// for (int i = 0; i < coursenames.length; i++) {
-			// Course newcourse = new Course();
-			// newcourse.setName(coursenames[i]);
-			// newcourse.setContent(coursecontents[i]);
-			// newcourse.setCapacity(Integer.valueOf(coursecapacitys[i]));
-			// newcourse.setTeacher(teachers[i]);
-			// newcourse.setJobid(jobid);
-			// int courseid;
-			// try {
-			// courseid = new CourseDAO().insert(newcourse);
-			// newcourse.setId(courseid);
-			// } catch (SQLException e) {
-			// e.printStackTrace();
-			// }
-			// }
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}

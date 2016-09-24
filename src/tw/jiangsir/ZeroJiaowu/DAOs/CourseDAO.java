@@ -15,11 +15,9 @@ public class CourseDAO extends SuperDAO<Course> {
 	}
 
 	public synchronized int insert(Course course) throws SQLException {
-		String sql = "INSERT INTO courses (jobid, name, capacity, teacher, content) VALUES"
-				+ "(?,?,?,?,?);";
+		String sql = "INSERT INTO courses (jobid, name, capacity, teacher, content) VALUES" + "(?,?,?,?,?);";
 		int id = 0;
-		PreparedStatement pstmt = this.getConnection().prepareStatement(sql,
-				Statement.RETURN_GENERATED_KEYS);
+		PreparedStatement pstmt = this.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 		pstmt.setInt(1, course.getJobid());
 		pstmt.setString(2, course.getName());
 		pstmt.setInt(3, course.getCapacity());
@@ -55,14 +53,12 @@ public class CourseDAO extends SuperDAO<Course> {
 	}
 
 	public ArrayList<Course> getCoursesByJobid(Integer jobid) {
-		String sql = "SELECT * FROM courses WHERE jobid=" + jobid
-				+ " ORDER BY id ASC";
+		String sql = "SELECT * FROM courses WHERE jobid=" + jobid + " ORDER BY id ASC";
 		return this.executeQuery(sql, Course.class);
 	}
 
 	public Course getCourseById(int courseid) {
-		String sql = "SELECT * FROM courses WHERE id=" + courseid
-				+ " ORDER BY id ASC";
+		String sql = "SELECT * FROM courses WHERE id=" + courseid + " ORDER BY id ASC";
 		for (Course course : this.executeQuery(sql, Course.class)) {
 			return course;
 		}

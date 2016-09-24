@@ -10,7 +10,7 @@ jQuery(document).ready(
 				timeFormat : 'HH:mm:ss'
 			});
 
-			jQuery("div[id=addcourse]").click(
+			jQuery("button[id=addcourse]").click(
 					function() {
 						if (jQuery("div[id=coursebox]").size()
 								+ jQuery("div[id=newcoursebox]").size() < 10) {
@@ -58,4 +58,14 @@ jQuery(document).ready(
 							} // success
 						});
 					});
+
+			jQuery("button[id='removeCourse']").bind('click', function() {
+				var index = jQuery("button[id='removeCourse']").index(this);
+				var size = jQuery("button[id='removeCourse']").size();
+				if (size > 1) {
+					var coursebox = $(this).closest("div[id='coursebox']");
+					coursebox.remove();
+				}
+			});
+
 		});

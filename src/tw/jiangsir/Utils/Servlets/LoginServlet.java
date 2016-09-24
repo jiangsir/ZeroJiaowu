@@ -32,9 +32,9 @@ public class LoginServlet extends HttpServlet {
 		passwd = passwd.toUpperCase();
 
 		User user = new UserDAO().getUserByAccountPasswd(account, passwd);
-		if (user != null && !user.isNullUser()) {
+		if (user != null && !user.getIsNullUser()) {
 			SessionScope sessionScope = new SessionScope(session);
-			sessionScope.setOnlineUser(new CurrentUserDAO().getCurrentUserById(user.getId(), session));
+			sessionScope.setCurrentUser(new CurrentUserDAO().getCurrentUserById(user.getId(), session));
 			response.sendRedirect(request.getContextPath() + sessionScope.getHistories().get(0));
 			return;
 		} else {

@@ -51,8 +51,8 @@ public class RoleFilter implements Filter {
 		// return;
 		// }
 
-		CurrentUser onlineUser = new SessionScope(session).getOnlineUser();
-		if (onlineUser == null || onlineUser.isNullUser()) {
+		CurrentUser currentUser = new SessionScope(session).getCurrentUser();
+		if (currentUser == null || currentUser.getIsNullUser()) {
 
 			request.getRequestDispatcher("/Login.jsp").forward(request, response);
 			// response.sendRedirect(request.getContextPath() +
@@ -60,7 +60,7 @@ public class RoleFilter implements Filter {
 			// .getAnnotation(WebServlet.class).urlPatterns()[0]);
 			return;
 		}
-		if (!this.isUserInRoles(onlineUser, httpServlet)) {
+		if (!this.isUserInRoles(currentUser, httpServlet)) {
 			throw new DataException("您沒有權限瀏覽這個頁面。");
 		}
 		chain.doFilter(request, response);
@@ -128,10 +128,10 @@ public class RoleFilter implements Filter {
 	 * @param httpServlet
 	 * @return
 	 */
-	private boolean isUserInRoles(CurrentUser onlineUser, HttpServlet httpServlet) {
+	private boolean isUserInRoles(CurrentUser currentUser, HttpServlet httpServlet) {
 		// return ApplicationScope.getRoleMap().get(onlineUser.getRole())
 		// .contains(httpServlet);
-		return this.getRoleSet(httpServlet).contains(onlineUser.getRole());
+		return this.getRoleSet(httpServlet).contains(currentUser.getRole());
 	}
 
 }
