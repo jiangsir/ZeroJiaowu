@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
 import tw.jiangsir.Utils.Annotations.RoleSetting;
+import tw.jiangsir.Utils.Exceptions.DataException;
 import tw.jiangsir.ZeroJiaowu.DAOs.CourseDAO;
 import tw.jiangsir.ZeroJiaowu.DAOs.JobDAO;
 import tw.jiangsir.ZeroJiaowu.Objects.Course;
@@ -53,39 +54,35 @@ public class UpdateJobServlet extends HttpServlet {
 		job.setFinishtime(request.getParameter("finishtime"));
 		try {
 			new JobDAO().update(job);
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		String[] courseids = request.getParameterValues("courseid");
+		new CourseDAO().deleteByJobid(job.getId());
+
 		String[] coursenames = request.getParameterValues("coursename");
 		String[] coursecontents = request.getParameterValues("coursecontent");
 		String[] teachers = request.getParameterValues("teacher");
 		String[] coursecapacitys = request.getParameterValues("coursecapacity");
 		for (int i = 0; i < coursenames.length; i++) {
-			System.out.println("coursenames.length=" + coursenames.length + ", courseids[i]=" + courseids[i]);
+			// System.out.println("coursenames.length=" + coursenames.length +
+			// ", courseids[i]=" + courseids[i]);
 			Course course = new Course();
-			if (!"".equals(courseids[i])) {
-				// course = new Course(Integer.valueOf(courseids[i]));
-				course = new CourseDAO().getCourseById(Integer.valueOf(courseids[i]));
-			}
+			// if (!"".equals(courseids[i])) {
+			// // course = new Course(Integer.valueOf(courseids[i]));
+			// course = new
+			// CourseDAO().getCourseById(Integer.valueOf(courseids[i]));
+			// }
 			course.setName(coursenames[i]);
 			course.setContent(coursecontents[i]);
 			course.setCapacity(Integer.valueOf(coursecapacitys[i]));
 			course.setTeacher(teachers[i]);
-			if (course.getId().intValue() == 0) {
-				course.setJobid(jobid);
-				try {
-					new CourseDAO().insert(course);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			} else {
-				try {
-					new CourseDAO().update(course);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+			course.setJobid(jobid);
+			try {
+				new CourseDAO().insert(course);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new DataException(e);
 			}
 		}
 

@@ -284,19 +284,20 @@ abstract public class SuperDAO<T> {
 		}
 	}
 
-	public synchronized int executeUpdate(PreparedStatement pstmt) {
+	public synchronized int executeUpdate(PreparedStatement pstmt) throws SQLException {
 		long starttime = System.currentTimeMillis();
 
 		int result = -1;
-		try {
-			result = pstmt.executeUpdate();
-			// pstmt.close(); // 不能在這裡 close, 後面還需要用 pstmt 來取得 key
-			System.out.println(
-					"PSTMT_SQL=" + pstmt.toString() + " 共耗時 " + (System.currentTimeMillis() - starttime) + " ms");
-		} catch (SQLException e) {
-			logger.warning("SQL_ERROR=" + pstmt.toString());
-			e.printStackTrace();
-		}
+		// try {
+		result = pstmt.executeUpdate();
+		// pstmt.close(); // 不能在這裡 close, 後面還需要用 pstmt 來取得 key
+		System.out
+				.println("PSTMT_SQL=" + pstmt.toString() + " 共耗時 " + (System.currentTimeMillis() - starttime) + " ms");
+		// } catch (SQLException e) {
+		// logger.warning("SQL_ERROR=" + pstmt.toString());
+		// e.printStackTrace();
+		//
+		// }
 		return result;
 	}
 

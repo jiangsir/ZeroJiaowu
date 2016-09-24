@@ -245,7 +245,7 @@
 
 						<div class="namebox">
 							<c:forEach var="submittedelective" items="${submittedelectives}">
-          ${submittedelective.account}(${submittedelective.user.username},${submittedelective.user.comment}${submittedelective.user.number}): 1.${submittedelective.course1}, 2.${submittedelective.course2}, 3.${submittedelective.course3}, 4.${submittedelective.course4}, ${submittedelective.submittime}<br />
+          ${submittedelective.account}(${submittedelective.user.username},${submittedelective.user.comment}${submittedelective.user.number}): 1.${submittedelective.course1.name}, 2.${submittedelective.course2.name}, 3.${submittedelective.course3.name}, 4.${submittedelective.course4.name}, ${submittedelective.submittime}<br />
 							</c:forEach>
 						</div>
 					</div>
@@ -282,12 +282,12 @@
 									<td>${nonfenfaedelective.account}:${nonfenfaedelective.user.username}<br />(${nonfenfaedelective.user.comment}
 										${nonfenfaedelective.user.number})
 									</td>
-									<td>${nonfenfaedelective.course1}</td>
-									<td>${nonfenfaedelective.course2}</td>
-									<td>${nonfenfaedelective.course3}</td>
-									<td>${nonfenfaedelective.course4}</td>
+									<td>${nonfenfaedelective.course1.name}</td>
+									<td>${nonfenfaedelective.course2.name}</td>
+									<td>${nonfenfaedelective.course3.name}</td>
+									<td>${nonfenfaedelective.course4.name}</td>
 									<td><c:if
-											test="${nonfenfaedelective.course1!='' || nonfenfaedelective.course2!='' || nonfenfaedelective.course3!='' || nonfenfaedelective.course4!='' }">${nonfenfaedelective.submittime}</c:if>
+											test="${nonfenfaedelective.course1.name!='' || nonfenfaedelective.course2.name!='' || nonfenfaedelective.course3.name!='' || nonfenfaedelective.course4.name!='' }">${nonfenfaedelective.submittime}</c:if>
 									</td>
 									<td><c:if test="${nonfenfaedelective.lock==1}">
 											<a href="" electiveid="${nonfenfaedelective.id }"

@@ -71,7 +71,7 @@
 					value="<fmt:formatDate value="${job.finishtime}" pattern="yyyy-MM-dd HH:mm:ss"/>
           " />
 			</div>
-<%-- 			<div class="form-group">
+			<%-- 			<div class="form-group">
 				<label for="coursecsv">快速設定課程項目</label>
 				<p class="help-block">* 請依下列格式編寫 csv 內容，一筆資料一行，以 # 開頭的資料行將被忽略。</p>
 				<textarea class="form-control" id="coursecsv" name="coursecsv"
@@ -79,15 +79,17 @@
 ${coursecsv}</textarea>
 
 			</div>
- --%>			<div class="container-fluid">
+ --%>
+			<div class="container">
 				<div class="row">
 					<h3>課程項目：</h3>
 					<div class="col-md-12">
-						<c:forEach var="course" items="${courses}">
-							<input name="courseid" type="hidden" value="${course.id}" />
+						<c:forEach var="course" items="${courses}" varStatus="varstatus">
 							<div id="coursebox">
+								<input name="courseid" type="hidden" value="${course.id}" />
 								<div class="row">
 									<div class="col-md-5">
+										<span id="course_index">#${varstatus.count }</span>
 										<div class="form-group">
 											<label for="coursename" class="col-sm-3 control-label">
 												課程名稱： </label>
@@ -123,8 +125,14 @@ ${coursecsv}</textarea>
 
 									</div>
 									<div class="col-md-1">
-										<button type="button" class="btn btn-default" id="removeCourse">
-											<span class="glyphicon glyphicon-remove"></span>
+										<button type="button" class="btn btn-default"
+											id="removeCourse">
+											<span class="glyphicon glyphicon-remove" title="移除本課程"></span>
+										</button>
+
+										<button type="button" class="btn btn-default"
+											id="duplicateCourse">
+											<span class="glyphicon glyphicon-plus" title="再製本課程"></span>
 										</button>
 									</div>
 

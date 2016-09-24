@@ -37,6 +37,17 @@ public class CourseDAO extends SuperDAO<Course> {
 		return this.execute(sql);
 	}
 
+	/**
+	 * 刪除 jobid 底下所有 courses
+	 * 
+	 * @param jobid
+	 * @return
+	 */
+	public boolean deleteByJobid(int jobid) {
+		String sql = "DELETE FROM courses WHERE jobid=" + jobid;
+		return this.execute(sql);
+	}
+
 	public synchronized int update(Course course) throws SQLException {
 		String sql = "UPDATE courses SET jobid=?, name=?, capacity=?, teacher=?, content=? WHERE id=?";
 		int result = -1;

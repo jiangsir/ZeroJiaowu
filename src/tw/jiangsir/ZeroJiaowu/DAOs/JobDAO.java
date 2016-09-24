@@ -283,15 +283,15 @@ public class JobDAO extends SuperDAO<Job> {
 				row = sheet.createRow(++rindex);
 				int colindex = 0;
 				row.createCell(colindex++).setCellValue(elective.getNth());
-				row.createCell(colindex++).setCellValue(elective.getSelected());
+				row.createCell(colindex++).setCellValue(elective.getSelected().getName());
 				row.createCell(colindex++).setCellValue(elective.getAccount());
 				row.createCell(colindex++).setCellValue(elective.getUser().getUsername());
 				row.createCell(colindex++)
 						.setCellValue(elective.getUser().getComment() + elective.getUser().getNumber());
-				row.createCell(colindex++).setCellValue(elective.getCourse1());
-				row.createCell(colindex++).setCellValue(elective.getCourse2());
-				row.createCell(colindex++).setCellValue(elective.getCourse3());
-				row.createCell(colindex++).setCellValue(elective.getCourse4());
+				row.createCell(colindex++).setCellValue(elective.getCourse1().getName());
+				row.createCell(colindex++).setCellValue(elective.getCourse2().getName());
+				row.createCell(colindex++).setCellValue(elective.getCourse3().getName());
+				row.createCell(colindex++).setCellValue(elective.getCourse4().getName());
 			}
 		}
 		HSSFSheet sheet = workbook.createSheet("無法分發名單"); // 在活頁簿中建立一個Sheet
@@ -312,10 +312,10 @@ public class JobDAO extends SuperDAO<Job> {
 			row.createCell(colindex++).setCellValue(elective.getAccount());
 			row.createCell(colindex++).setCellValue(elective.getUser().getUsername());
 			row.createCell(colindex++).setCellValue(elective.getUser().getComment() + elective.getUser().getNumber());
-			row.createCell(colindex++).setCellValue(elective.getCourse1());
-			row.createCell(colindex++).setCellValue(elective.getCourse2());
-			row.createCell(colindex++).setCellValue(elective.getCourse3());
-			row.createCell(colindex++).setCellValue(elective.getCourse4());
+			row.createCell(colindex++).setCellValue(elective.getCourse1().getName());
+			row.createCell(colindex++).setCellValue(elective.getCourse2().getName());
+			row.createCell(colindex++).setCellValue(elective.getCourse3().getName());
+			row.createCell(colindex++).setCellValue(elective.getCourse4().getName());
 		}
 
 		HSSFSheet sheet1 = workbook.createSheet("未上網填報"); // 在活頁簿中建立一個Sheet

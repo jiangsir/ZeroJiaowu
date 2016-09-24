@@ -27,7 +27,21 @@ jQuery(document).ready(
 										$(this).val("");
 									});
 						}
+						var count = 0;
+						jQuery("span[id='course_index']").each(function() {
+							$(this).html("#" + ++count);
+						});
 					});
+
+			jQuery("button[id=duplicateCourse]").click(function() {
+				var coursebox = $(this).closest("div[id=coursebox]");
+				//alert(coursebox);
+				coursebox.clone(true).insertAfter(coursebox);
+				var count = 0;
+				jQuery("span[id='course_index']").each(function() {
+					$(this).html("#" + ++count);
+				});
+			});
 
 			jQuery("span[id='deleteCourse']").click(
 					function() {
@@ -66,6 +80,11 @@ jQuery(document).ready(
 					var coursebox = $(this).closest("div[id='coursebox']");
 					coursebox.remove();
 				}
+				var count = 0;
+				jQuery("span[id='course_index']").each(function() {
+					$(this).html("#" + ++count);
+				});
+
 			});
 
 		});

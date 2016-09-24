@@ -40,17 +40,18 @@ public class ElectiveDAO extends SuperDAO<Elective> {
 		// + ", '"
 		// + Utils.parseDatetime(elective.getSubmittime().getTime())
 		// + "', '" + elective.getIpfrom() + "')";
-		String sql = "INSERT INTO electives (jobid, account, course1, course2, "
-				+ "course3, course4, selected, nth, `lock`, submittime, ipfrom) " + "VALUES(?,?,?,?,?, ?,?,?,?,?, ?);";
+		String sql = "INSERT INTO electives (jobid, account, courseid1, courseid2, "
+				+ "courseid3, courseid4, selectedid, nth, `lock`, submittime, ipfrom) "
+				+ "VALUES(?,?,?,?,?, ?,?,?,?,?, ?);";
 		int id = 0;
 		PreparedStatement pstmt = this.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 		pstmt.setInt(1, elective.getJobid());
 		pstmt.setString(2, elective.getAccount());
-		pstmt.setString(3, elective.getCourse1());
-		pstmt.setString(4, elective.getCourse2());
-		pstmt.setString(5, elective.getCourse3());
-		pstmt.setString(6, elective.getCourse4());
-		pstmt.setString(7, elective.getSelected());
+		pstmt.setInt(3, elective.getCourseid1());
+		pstmt.setInt(4, elective.getCourseid2());
+		pstmt.setInt(5, elective.getCourseid3());
+		pstmt.setInt(6, elective.getCourseid4());
+		pstmt.setInt(7, elective.getSelectedid());
 		pstmt.setInt(8, elective.getNth());
 		pstmt.setInt(9, elective.getLock());
 		pstmt.setTimestamp(10, new Timestamp(elective.getSubmittime().getTime()));
@@ -76,15 +77,15 @@ public class ElectiveDAO extends SuperDAO<Elective> {
 		// + "', ipfrom='" + elective.getIpfrom()
 		// + "' WHERE useraccount='" + elective.getUseraccount()
 		// + "' AND jobid=" + elective.getJobid();
-		String sql = "UPDATE electives SET course1=?, course2=?, course3=?, course4=?, selected=?, "
+		String sql = "UPDATE electives SET courseid1=?, courseid2=?, courseid3=?, courseid4=?, selectedid=?, "
 				+ "nth=?, `lock`=?, submittime=?, ipfrom=? WHERE account=? AND jobid=?";
 		int result = -1;
 		PreparedStatement pstmt = this.getConnection().prepareStatement(sql);
-		pstmt.setString(1, elective.getCourse1());
-		pstmt.setString(2, elective.getCourse2());
-		pstmt.setString(3, elective.getCourse3());
-		pstmt.setString(4, elective.getCourse4());
-		pstmt.setString(5, elective.getSelected());
+		pstmt.setInt(1, elective.getCourseid1());
+		pstmt.setInt(2, elective.getCourseid2());
+		pstmt.setInt(3, elective.getCourseid3());
+		pstmt.setInt(4, elective.getCourseid4());
+		pstmt.setInt(5, elective.getSelectedid());
 		pstmt.setInt(6, elective.getNth());
 		pstmt.setInt(7, elective.getLock());
 		pstmt.setTimestamp(8, new Timestamp(elective.getSubmittime().getTime()));
@@ -117,10 +118,10 @@ public class ElectiveDAO extends SuperDAO<Elective> {
 		text += "id=" + elective.getId();
 		text += "jobid=" + elective.getJobid() + "\n";
 		text += "account=" + elective.getAccount() + "\n";
-		text += "course1=" + elective.getCourse1() + "\n";
-		text += "course2=" + elective.getCourse2() + "\n";
-		text += "course3=" + elective.getCourse3() + "\n";
-		text += "course4=" + elective.getCourse4() + "\n";
+		text += "course1=" + elective.getCourse1().getName() + "\n";
+		text += "course2=" + elective.getCourse2().getName() + "\n";
+		text += "course3=" + elective.getCourse3().getName() + "\n";
+		text += "course4=" + elective.getCourse4().getName() + "\n";
 		text += "submittime=" + Utils.parseDatetime(elective.getSubmittime().getTime()) + "\n";
 		return text;
 	}
@@ -172,8 +173,8 @@ public class ElectiveDAO extends SuperDAO<Elective> {
 	 * @return
 	 */
 	public boolean isReserved(int jobid, String account) {
-		String sql = "SELECT * FROM electives WHERE course1='' AND "
-				+ "course2='' AND course3='' AND course4='' AND selected!=''" + " AND jobid=" + jobid + " AND account='"
+		String sql = "SELECT * FROM electives WHERE courseid1=0 AND "
+				+ "courseid2=0 AND courseid3=0 AND courseid4=0 AND selectedid!=0 AND jobid=" + jobid + " AND account='"
 				+ account + "'";
 		return this.executeCount(sql) > 0 ? true : false;
 	}
@@ -207,8 +208,9 @@ public class ElectiveDAO extends SuperDAO<Elective> {
 	 * @return
 	 */
 	public ArrayList<Elective> SubmittedElectives(int jobid) {
-		String sql = "SELECT * FROM electives WHERE course1!='' " + "AND course2!='' AND course3!='' AND course4!='' "
-				+ "AND jobid=" + jobid + " ORDER BY submittime DESC";
+		String sql = "SELECT * FROM electives WHERE courseid1!=0 "
+				+ "AND courseid2!=0 AND courseid3!=0 AND courseid4!=0 " + "AND jobid=" + jobid
+				+ " ORDER BY submittime DESC";
 		return this.executeQuery(sql, Elective.class);
 	}
 

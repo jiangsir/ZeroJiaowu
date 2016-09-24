@@ -152,15 +152,15 @@ public class ElectiveServlet extends HttpServlet {
 		Elective newelective = new Elective();
 		newelective.setJobid(Integer.parseInt(request.getParameter("jobid")));
 		newelective.setAccount(currentUser.getAccount());
-		newelective.setCourse1(request.getParameter("course1"));
-		newelective.setCourse2(request.getParameter("course2"));
-		newelective.setCourse3(request.getParameter("course3"));
-		newelective.setCourse4(request.getParameter("course4"));
-		TreeSet<String> set = new TreeSet<String>();
-		set.add(newelective.getCourse1());
-		set.add(newelective.getCourse2());
-		set.add(newelective.getCourse3());
-		set.add(newelective.getCourse4());
+		newelective.setCourseid1(Integer.parseInt(request.getParameter("courseid1")));
+		newelective.setCourseid2(Integer.parseInt(request.getParameter("courseid2")));
+		newelective.setCourseid3(Integer.parseInt(request.getParameter("courseid3")));
+		newelective.setCourseid4(Integer.parseInt(request.getParameter("courseid4")));
+		TreeSet<Integer> set = new TreeSet<Integer>();
+		set.add(newelective.getCourseid1());
+		set.add(newelective.getCourseid2());
+		set.add(newelective.getCourseid3());
+		set.add(newelective.getCourseid4());
 		if (set.size() < 4) {
 			Message message = new Message();
 			message.setType(Message.getMessageType_ALERT());

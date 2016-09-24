@@ -233,4 +233,9 @@ public class Course {
 		return new CourseDAO().getCoursesByJobid(jobid);
 	}
 
+	@Override
+	public String toString() {
+		return this.getName();
+	}
+
 }

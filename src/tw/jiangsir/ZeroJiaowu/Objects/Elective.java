@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import tw.jiangsir.Utils.CurrentUser;
 import tw.jiangsir.Utils.Persistent;
+import tw.jiangsir.ZeroJiaowu.DAOs.CourseDAO;
 import tw.jiangsir.ZeroJiaowu.DAOs.ElectiveDAO;
 import tw.jiangsir.ZeroJiaowu.DAOs.JobDAO;
 import tw.jiangsir.ZeroJiaowu.DAOs.UserDAO;
@@ -34,16 +35,18 @@ public class Elective {
 	private Integer courseid3 = 0;
 	@Persistent(name = "courseid4")
 	private Integer courseid4 = 0;
-	@Persistent(name = "course1")
-	private String course1 = "";
-	@Persistent(name = "course2")
-	private String course2 = "";
-	@Persistent(name = "course3")
-	private String course3 = "";
-	@Persistent(name = "course4")
-	private String course4 = "";
-	@Persistent(name = "selected")
-	private String selected = "";
+	@Persistent(name = "selectedid")
+	private Integer selectedid = 0;
+	// @Persistent(name = "course1")
+	// private String course1 = "";
+	// @Persistent(name = "course2")
+	// private String course2 = "";
+	// @Persistent(name = "course3")
+	// private String course3 = "";
+	// @Persistent(name = "course4")
+	// private String course4 = "";
+	// @Persistent(name = "selected")
+	// private String selected = "";
 	@Persistent(name = "nth")
 	private Integer nth = 0;
 	public static final int LOCK_LOCKED = 1;
@@ -109,13 +112,13 @@ public class Elective {
 	// this.setIpfrom((String) map.get("ipfrom"));
 	// }
 
-	public String getSelected() {
-		return selected;
-	}
-
-	public void setSelected(String selected) {
-		this.selected = selected;
-	}
+	// public String getSelected() {
+	// return selected;
+	// }
+	//
+	// public void setSelected(String selected) {
+	// this.selected = selected;
+	// }
 
 	public int getNth() {
 		return nth;
@@ -149,48 +152,44 @@ public class Elective {
 		this.jobid = jobid;
 	}
 
-	public String getCourse1() {
-		return course1;
+	public Integer getCourseid1() {
+		return courseid1;
 	}
 
-	public void setCourse1(String course1) {
-		if (course1 == null) {
-			return;
-		}
-		this.course1 = course1;
+	public void setCourseid1(Integer courseid1) {
+		this.courseid1 = courseid1;
 	}
 
-	public String getCourse2() {
-		return course2;
+	public Integer getCourseid2() {
+		return courseid2;
 	}
 
-	public void setCourse2(String course2) {
-		if (course2 == null) {
-			return;
-		}
-		this.course2 = course2;
+	public void setCourseid2(Integer courseid2) {
+		this.courseid2 = courseid2;
 	}
 
-	public String getCourse3() {
-		return course3;
+	public Integer getCourseid3() {
+		return courseid3;
 	}
 
-	public void setCourse3(String course3) {
-		if (course3 == null) {
-			return;
-		}
-		this.course3 = course3;
+	public void setCourseid3(Integer courseid3) {
+		this.courseid3 = courseid3;
 	}
 
-	public String getCourse4() {
-		return course4;
+	public Integer getCourseid4() {
+		return courseid4;
 	}
 
-	public void setCourse4(String course4) {
-		if (course4 == null) {
-			return;
-		}
-		this.course4 = course4;
+	public void setCourseid4(Integer courseid4) {
+		this.courseid4 = courseid4;
+	}
+
+	public Integer getSelectedid() {
+		return selectedid;
+	}
+
+	public void setSelectedid(Integer selectedid) {
+		this.selectedid = selectedid;
 	}
 
 	public String getAccount() {
@@ -231,19 +230,35 @@ public class Elective {
 		return new UserDAO().getUserByAccount(this.getAccount());
 	}
 
+	public Course getCourse1() {
+		return new CourseDAO().getCourseById(this.getCourseid1());
+	}
+	public Course getCourse2() {
+		return new CourseDAO().getCourseById(this.getCourseid2());
+	}
+	public Course getCourse3() {
+		return new CourseDAO().getCourseById(this.getCourseid3());
+	}
+	public Course getCourse4() {
+		return new CourseDAO().getCourseById(this.getCourseid4());
+	}
+	public Course getSelected() {
+		return new CourseDAO().getCourseById(this.getSelectedid());
+	}
+
 	public String getResult() {
 		String text = "恭喜您完成志願選填作業！<br>";
 		text += "如有疑問請將本畫面列印下來，並洽教務處。<br><br>";
 		text += "您已經於 " + Utils.parseDatetime(this.getSubmittime().getTime()) + " 完成選填作業！(#" + this.getId() + ")<br>";
-		text += "第一志願： " + this.getCourse1() + "<br>";
+		text += "第一志願： " + this.getCourse1().getName() + "<br>";
 		if (this.getJob().getMax_choose() >= 2) {
-			text += "第二志願： " + this.getCourse2() + "<br>";
+			text += "第二志願： " + this.getCourse2().getName() + "<br>";
 		}
 		if (this.getJob().getMax_choose() >= 3) {
-			text += "第三志願： " + this.getCourse3() + "<br>";
+			text += "第三志願： " + this.getCourse3().getName() + "<br>";
 		}
 		if (this.getJob().getMax_choose() >= 4) {
-			text += "第四志願： " + this.getCourse4() + "<br>";
+			text += "第四志願： " + this.getCourse4().getName() + "<br>";
 		}
 		return text;
 	}
