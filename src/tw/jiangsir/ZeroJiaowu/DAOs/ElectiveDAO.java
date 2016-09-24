@@ -190,14 +190,14 @@ public class ElectiveDAO extends SuperDAO<Elective> {
 	 * 
 	 * @return
 	 */
-	public ArrayList<Elective> getnthElectives(String coursename, int jobid, int nth, String orderby) {
-		String sql = "SELECT * FROM electives WHERE course" + nth + "='" + coursename + "' AND selected='' AND jobid="
+	public ArrayList<Elective> getnthElectives(int courseid, int jobid, int nth, String orderby) {
+		String sql = "SELECT * FROM electives WHERE courseid" + nth + "=" + courseid + " AND selectedid=0 AND jobid="
 				+ jobid + " " + orderby;
 		return this.executeQuery(sql, Elective.class);
 	}
 
-	public ArrayList<Elective> getElectivesBySelectedJobid(String selected, int jobid) {
-		String sql = "SELECT * FROM electives WHERE selected='" + selected + "' AND jobid=" + jobid
+	public ArrayList<Elective> getElectivesBySelectedJobid(int selectedid, int jobid) {
+		String sql = "SELECT * FROM electives WHERE selectedid=" + selectedid + " AND jobid=" + jobid
 				+ " ORDER BY nth, submittime ASC";
 		return this.executeQuery(sql, Elective.class);
 	}
@@ -209,8 +209,7 @@ public class ElectiveDAO extends SuperDAO<Elective> {
 	 */
 	public ArrayList<Elective> SubmittedElectives(int jobid) {
 		String sql = "SELECT * FROM electives WHERE courseid1!=0 "
-				+ "AND courseid2!=0 AND courseid3!=0 AND courseid4!=0 " + "AND jobid=" + jobid
-				+ " ORDER BY submittime DESC";
+				+ "AND courseid2!=0 AND courseid3!=0 AND courseid4!=0 AND jobid=" + jobid + " ORDER BY submittime DESC";
 		return this.executeQuery(sql, Elective.class);
 	}
 
@@ -221,7 +220,7 @@ public class ElectiveDAO extends SuperDAO<Elective> {
 	 * @return
 	 */
 	public ArrayList<Elective> NonFenfaedElectives(int jobid) {
-		String sql = "SELECT * FROM electives WHERE selected='' AND jobid=" + jobid;
+		String sql = "SELECT * FROM electives WHERE selectedid=0 AND jobid=" + jobid;
 		return this.executeQuery(sql, Elective.class);
 	}
 
@@ -242,7 +241,7 @@ public class ElectiveDAO extends SuperDAO<Elective> {
 	 * @param jobid
 	 */
 	public void cleanFenfa(int jobid) {
-		String sql = "UPDATE electives SET selected='' WHERE `lock`!=" + Elective.LOCK_LOCKED + " AND jobid=" + jobid;
+		String sql = "UPDATE electives SET selectedid=0 WHERE `lock`!=" + Elective.LOCK_LOCKED + " AND jobid=" + jobid;
 		this.execute(sql);
 	}
 
@@ -255,8 +254,8 @@ public class ElectiveDAO extends SuperDAO<Elective> {
 		}
 	}
 
-	public void UpdateSelected(int jobid, String coursename) {
-		String sql = "UPDATE electives SET selected='" + coursename + "' WHERE id=" + jobid;
+	public void UpdateSelected(int jobid, int courseid) {
+		String sql = "UPDATE electives SET selectedid=" + courseid + " WHERE id=" + jobid;
 		try {
 			this.execute(sql);
 		} catch (Exception e) {

@@ -152,7 +152,7 @@ public class Course {
 	 * 取出在選中本課程的學生
 	 */
 	public ArrayList<Elective> getElectives() {
-		return new ElectiveDAO().getElectivesBySelectedJobid(this.getName(), this.getJobid());
+		return new ElectiveDAO().getElectivesBySelectedJobid(this.getId(), this.getJobid());
 	}
 
 	/**
@@ -161,7 +161,7 @@ public class Course {
 	 * @return
 	 */
 	private ArrayList<Elective> getnthElectives(int nth, String orderby) {
-		return new ElectiveDAO().getnthElectives(this.getName(), this.getJobid(), nth, orderby);
+		return new ElectiveDAO().getnthElectives(this.getId(), this.getJobid(), nth, orderby);
 		// ArrayList<Elective> electives = new ArrayList<Elective>();
 		// String sql = "SELECT * FROM electives WHERE course" + nth + "='"
 		// + this.getName() + "' AND selected='' AND jobid="
@@ -193,13 +193,13 @@ public class Course {
 			// elective.UpdateNth(nth);
 			// }
 			for (Elective elective : nthelectives) {
-				electiveDao.UpdateSelected(elective.getId(), this.getName());
+				electiveDao.UpdateSelected(elective.getId(), this.getId());
 				electiveDao.UpdateNth(elective.getId(), nth);
 			}
 		} else { // 超過人數時
 			// 在同一個志願順序的前提下，依照登錄順序來決定，應該改成其他方式來決定哪些人選中
 			for (int i = 0; i < this.getCapacity() - electives.size(); i++) {
-				electiveDao.UpdateSelected(nthelectives.get(i).getId(), this.getName());
+				electiveDao.UpdateSelected(nthelectives.get(i).getId(), this.getId());
 				electiveDao.UpdateNth(nthelectives.get(i).getId(), nth);
 				// nthelectives.get(i).UpdateSelected(this.getName());
 				// nthelectives.get(i).UpdateNth(nth);

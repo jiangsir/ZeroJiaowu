@@ -236,7 +236,7 @@
 						<a class="collapsed" role="button" data-toggle="collapse"
 							data-parent="#accordion" href="#collapseTwo"
 							aria-expanded="false" aria-controls=" collapseTwo">
-							已經完成選填，但尚未分發完成者(共 ${fn:length(submittedelectives)} 人)： </a>
+							已經完成選填(共 ${fn:length(submittedelectives)} 人)： </a>
 					</h4>
 				</div>
 				<div id="collapseTwo" class="panel-collapse collapse"
@@ -434,10 +434,10 @@
 								<td>${varstatus.count}</td>
 								<td>${elective.nth}th</td>
 								<td>${elective.account}<br />${elective.user.username}</td>
-								<td>${elective.course1}</td>
-								<td>${elective.course2}</td>
-								<td>${elective.course3}</td>
-								<td>${elective.course4}</td>
+								<td>${elective.course1.name}</td>
+								<td>${elective.course2.name}</td>
+								<td>${elective.course3.name}</td>
+								<td>${elective.course4.name}</td>
 								<td><c:if test="${elective.lock==1}">
 
 										<a href="" electiveid="${elective.id }" id="doUnlock"
