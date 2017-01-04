@@ -92,9 +92,15 @@ public class ExportApi extends HttpServlet {
 			content.append("," + elective.getAccount());
 			content.append("," + elective.getUser().getUsername());
 			content.append("," + elective.getCourse1().getName());
-			content.append("," + elective.getCourse2().getName());
-			content.append("," + elective.getCourse3().getName());
-			content.append("," + elective.getCourse4().getName());
+			if (elective.getJob().getMax_choose() >= 2) {
+				content.append("," + elective.getCourse2().getName());
+			}
+			if (elective.getJob().getMax_choose() >= 3) {
+				content.append("," + elective.getCourse3().getName());
+			}
+			if (elective.getJob().getMax_choose() >= 4) {
+				content.append("," + elective.getCourse4().getName());
+			}
 			content.append("\n");
 		}
 
