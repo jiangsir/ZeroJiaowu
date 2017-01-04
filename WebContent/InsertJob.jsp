@@ -42,8 +42,10 @@
 					name="semester" value="${job.semester}" />
 			</div>
 			<div class="form-group">
-				<label for="max_choose">最多可選幾個志願：</label> <select
-					class="form-control" name="max_choose"
+				<label for="max_choose">最多可選幾個志願：</label>
+				<p class="help-block">* 不能超過您的課程總數。比如您總共只有 3 門課提供選擇，卻設定了 4
+					個志願，就必然至少有兩個志願是同一門課。</p>
+				<select class="form-control" name="max_choose"
 					data-max_choose="${job.max_choose}">
 					<option value=2>2</option>
 					<option value=3>3</option>

@@ -21,7 +21,6 @@
 <script type="text/javascript">
 	jQuery(document).ready(
 			function() {
-				jQuery("#reservedselections").hide();
 				jQuery("#nonfenfaelectives").hide();
 				jQuery("#submittedelectives").hide();
 				jQuery("tr").hover(function() {
@@ -43,13 +42,13 @@
 					reFenfa(jobid);
 					location.reload();
 				});
-				jQuery("#open_reserved").click(function() {
+/* 				jQuery("#open_reserved").click(function() {
 					jQuery("#reservedselections").show();
 				});
 				jQuery("#hide_reserved").click(function() {
 					jQuery("#reservedselections").hide();
 				});
-				jQuery("#open_nonfenfa").click(function() {
+ */				jQuery("#open_nonfenfa").click(function() {
 					jQuery("#nonfenfaelectives").show();
 				});
 				jQuery("#hide_nonfenfa").click(function() {
@@ -60,6 +59,24 @@
 				});
 				jQuery("#hide_submitted").click(function() {
 					jQuery("#submittedelectives").hide();
+				});
+
+				jQuery("button[id=deleteElective]").click(function() {
+					var electiveid = $(this).data('electiveid');
+					console.log("electiveid=" + electiveid);
+					//event.preventDefault(); // 讓預設的動作失效！
+					jQuery.ajax({
+						type : "POST",
+						url : "./Elective.do",
+						//data: "jobid="+${param.jobid},
+						data : "action=deleteElective&id=" + electiveid,
+						// async: false, // 一般來說不該使用，因為用了會 waiting 會在 ajax 執行完後才會出來。
+						timeout : 5000,
+						beforeSend : function() {
+						},
+						success : function(result) {
+						}, // success       
+					});
 				});
 
 				jQuery("a#deleteElective").click(
@@ -79,41 +96,42 @@
 								}, // success       
 							});
 						});
-				jQuery("a#doUnlock").click(
-						function() {
-							//event.preventDefault(); // 讓預設的動作失效！
-							jQuery.ajax({
-								type : "POST",
-								url : "./Elective.do",
-								//data: "jobid="+${param.jobid},
-								data : "action=changeLock&id="
-										+ $(this).attr('electiveid'),
-								// async: false, // 一般來說不該使用，因為用了會 waiting 會在 ajax 執行完後才會出來。
-								timeout : 5000,
-								beforeSend : function() {
-								},
-								success : function(result) {
-								}, // success       
-							});
-						});
-				jQuery("a#doLock").click(
-						function() {
-							//event.preventDefault(); // 讓預設的動作失效！
-							//alert($(this).attr('electiveid'));
-							jQuery.ajax({
-								type : "POST",
-								url : "./Elective.do",
-								//data: "jobid="+${param.jobid},
-								data : "action=changeLock&id="
-										+ $(this).attr('electiveid'),
-								// async: false, // 一般來說不該使用，因為用了會 waiting 會在 ajax 執行完後才會出來。
-								timeout : 5000,
-								beforeSend : function() {
-								},
-								success : function(result) {
-								}, // success       
-							});
-						});
+				jQuery("i[id=doUnlock]").click(function() {
+					var electiveid = $(this).data('electiveid');
+
+					//event.preventDefault(); // 讓預設的動作失效！
+					jQuery.ajax({
+						type : "POST",
+						url : "./Elective.do",
+						//data: "jobid="+${param.jobid},
+						data : "action=changeLock&id=" + electiveid,
+						// async: false, // 一般來說不該使用，因為用了會 waiting 會在 ajax 執行完後才會出來。
+						timeout : 5000,
+						beforeSend : function() {
+						},
+						success : function(result) {
+							location.reload();
+						}, // success       
+					});
+				});
+				jQuery("i[id=doLock]").click(function() {
+					var electiveid = $(this).data('electiveid');
+					//event.preventDefault(); // 讓預設的動作失效！
+					//alert($(this).attr('electiveid'));
+					jQuery.ajax({
+						type : "POST",
+						url : "./Elective.do",
+						//data: "jobid="+${param.jobid},
+						data : "action=changeLock&id=" + electiveid,
+						// async: false, // 一般來說不該使用，因為用了會 waiting 會在 ajax 執行完後才會出來。
+						timeout : 5000,
+						beforeSend : function() {
+						},
+						success : function(result) {
+							location.reload();
+						}, // success       
+					});
+				});
 			});
 
 	function reFenfa(jobid) {
@@ -228,6 +246,7 @@
 					role="tabpanel" aria-labelledby="headingOne">
 					<div class="panel-body">
 						<div id="reservedselections" class="namebox">
+						
 							<c:forEach var="reservedselection" items="${reservedselections}">
           ${reservedselection.account}(${reservedselection.user.username},${reservedselection.user.comment}${reservedselection.user.number}): ${reservedselection.selected}<br />
 							</c:forEach>
@@ -303,7 +322,7 @@
 											<a href="" electiveid="${nonfenfaedelective.id }" id="doLock"><i
 												class="fa fa-unlock" aria-hidden="true"></i></a>
 										</c:if> ｜ <a href="" id="deleteElective"
-										electiveid="${nonfenfaedelective.id}"
+										data-electiveid="${nonfenfaedelective.id}"
 										title="刪除：填錯的、不該填的、另有安排者。">刪除</a></td>
 								</tr>
 							</c:forEach>
@@ -445,16 +464,20 @@
 								<td>${elective.course3.name}</td>
 								<td>${elective.course4.name}</td>
 								<td><c:if test="${elective.lock==1}">
-
-										<a href="" electiveid="${elective.id }" id="doUnlock"
-											title="解鎖"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></a>
+										<i class="fa fa-lock fa-lg" aria-hidden="true" id="doUnlock"
+											data-electiveid="${elective.id }"></i>
 									</c:if> <c:if test="${elective.lock==0}">
-										<a href="" electiveid="${elective.id }" id="doLock"><i
-											class="fa fa-unlock fa-lg" aria-hidden="true"></i></a>
+										<i class="fa fa-unlock fa-lg" aria-hidden="true" id="doLock"
+											data-electiveid="${elective.id }"></i>
 									</c:if></td>
-								<td><a href="" id="deleteElective"
-									electiveid="${nonfenfaedelective.id}"
-									title="刪除：填錯的、不該填的、另有安排者。">刪除</a></td>
+								<td>
+									<button type="button" class="btn btn-default"
+										id="deleteElective" data-electiveid="${elective.id}"
+										title="刪除：填錯的、不該填的、另有安排者。">
+										<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+									</button>
+								</td>
+
 							</tr>
 						</c:forEach>
 					</table>
