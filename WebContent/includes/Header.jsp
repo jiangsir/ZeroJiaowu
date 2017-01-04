@@ -20,7 +20,7 @@
 
 <div class="bs-docs-header" id="content" tabindex="-1">
 	<div class="container">
-		<h1></h1>
+		<h1>高師大附中 線上選課系統</h1>
 	</div>
 </div>
 
@@ -33,7 +33,8 @@
 		<div class="collapse navbar-collapse"
 			id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav navbar-right">
-
+				<li><a href="./"><span class="glyphicon glyphicon-home"
+						aria-hidden="true"></span> 回首頁</a></li>
 				<c:if test="${sessionScope.currentUser != null}">
 					<c:if test="${sessionScope.currentUser.isAdmin}">
 						<li><a href="./EditAppConfig"><span
