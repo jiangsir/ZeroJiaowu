@@ -258,12 +258,12 @@ public class JobDAO extends SuperDAO<Job> {
 		for (Course course : job.getCourses()) {
 			String sheetname = course.getName() + "(" + course.getElectives().size() + "|" + course.getCapacity() + ")";
 			sheetname = sheetname.replaceAll(":", "：");
-			sheetname = sheetname.replaceAll("\\", "|");
-			sheetname = sheetname.replaceAll("*", "＊");
-			sheetname = sheetname.replaceAll("?", "？");
+			sheetname = sheetname.replaceAll("\\\\", "|");
+			sheetname = sheetname.replaceAll("\\*", "＊");
+			sheetname = sheetname.replaceAll("\\?", "？");
 			sheetname = sheetname.replaceAll("/", "／");
-			sheetname = sheetname.replaceAll("[", "「");
-			sheetname = sheetname.replaceAll("]", "」");
+			sheetname = sheetname.replaceAll("\\[", "「");
+			sheetname = sheetname.replaceAll("\\]", "」");
 
 			HSSFSheet sheet = workbook.createSheet(sheetname); // 在活頁簿中建立一個Sheet
 			HSSFRow row = sheet.createRow(0);
@@ -289,9 +289,15 @@ public class JobDAO extends SuperDAO<Job> {
 				row.createCell(colindex++)
 						.setCellValue(elective.getUser().getComment() + elective.getUser().getNumber());
 				row.createCell(colindex++).setCellValue(elective.getCourse1().getName());
-				row.createCell(colindex++).setCellValue(elective.getCourse2().getName());
-				row.createCell(colindex++).setCellValue(elective.getCourse3().getName());
-				row.createCell(colindex++).setCellValue(elective.getCourse4().getName());
+				if (elective.getJob().getMax_choose() >= 2) {
+					row.createCell(colindex++).setCellValue(elective.getCourse2().getName());
+				}
+				if (elective.getJob().getMax_choose() >= 3) {
+					row.createCell(colindex++).setCellValue(elective.getCourse3().getName());
+				}
+				if (elective.getJob().getMax_choose() >= 4) {
+					row.createCell(colindex++).setCellValue(elective.getCourse4().getName());
+				}
 			}
 		}
 		HSSFSheet sheet = workbook.createSheet("無法分發名單"); // 在活頁簿中建立一個Sheet
@@ -313,9 +319,15 @@ public class JobDAO extends SuperDAO<Job> {
 			row.createCell(colindex++).setCellValue(elective.getUser().getUsername());
 			row.createCell(colindex++).setCellValue(elective.getUser().getComment() + elective.getUser().getNumber());
 			row.createCell(colindex++).setCellValue(elective.getCourse1().getName());
-			row.createCell(colindex++).setCellValue(elective.getCourse2().getName());
-			row.createCell(colindex++).setCellValue(elective.getCourse3().getName());
-			row.createCell(colindex++).setCellValue(elective.getCourse4().getName());
+			if (elective.getJob().getMax_choose() >= 2) {
+				row.createCell(colindex++).setCellValue(elective.getCourse2().getName());
+			}
+			if (elective.getJob().getMax_choose() >= 3) {
+				row.createCell(colindex++).setCellValue(elective.getCourse3().getName());
+			}
+			if (elective.getJob().getMax_choose() >= 4) {
+				row.createCell(colindex++).setCellValue(elective.getCourse4().getName());
+			}
 		}
 
 		HSSFSheet sheet1 = workbook.createSheet("未上網填報"); // 在活頁簿中建立一個Sheet

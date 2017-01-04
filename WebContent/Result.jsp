@@ -4,8 +4,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ page isELIgnored="false"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
 <jsp:include page="includes/head.jsp" />
 
@@ -18,7 +18,7 @@
 	border-style: solid;
 }
 </style>
-<script language="javascript">
+<script type="text/javascript">
 	jQuery(document).ready(
 			function() {
 				jQuery("#reservedselections").hide();
@@ -32,13 +32,15 @@
 
 				jQuery("#DoFenfa").click(function() {
 					jQuery("#waiting").show();
-					doFenfa();
+					var jobid = $(this).data('jobid');
+					doFenfa(jobid);
 					location.reload();
 				});
 				jQuery("#ReFenfa").click(function() {
 					jQuery("#waiting").show();
 					//alert("after doFenfa()");
-					reFenfa();
+					var jobid = $(this).data('jobid');
+					reFenfa(jobid);
 					location.reload();
 				});
 				jQuery("#open_reserved").click(function() {
@@ -114,13 +116,13 @@
 						});
 			});
 
-	function reFenfa() {
+	function reFenfa(jobid) {
 		jQuery("#waiting").show();
 		jQuery.ajax({
 			type : "POST",
 			url : "./ReFenfa.do",
 			//data: "jobid="+${param.jobid},
-			data : "jobid=" + jQuery.urlParam('jobid'),
+			data : "jobid=" + jobid,
 			// async: false, // 一般來說不該使用，因為用了會 waiting 會在 ajax 執行完後才會出來。
 			timeout : 5000,
 			beforeSend : function() {
@@ -137,13 +139,14 @@
 		});
 	}
 
-	function doFenfa() {
+	function doFenfa(jobid) {
 		jQuery("#waiting").show();
+		console.log("jobid=" + jobid);
 		jQuery.ajax({
 			type : "POST",
 			url : "./DoFenfa.do",
 			//data: "jobid="+${param.jobid},
-			data : "jobid=" + jQuery.urlParam('jobid'),
+			data : "jobid=" + jobid,
 
 			// async: false, // 一般來說不該使用，因為用了會 waiting 會在 ajax 執行完後才會出來。
 			timeout : 5000,
@@ -181,11 +184,13 @@
  -->
 
 		<div class="btn-group" role="group" aria-label="...">
-			<div class="btn btn-default" id="ReFenfa">清除所有分發結果</div>
-			<div class="btn btn-default" id="DoFenfa"
+			<div class="btn btn-default" id="ReFenfa" data-jobid="${job.id}">
+				清除所有分發結果<i class="fa fa-refresh fa-spin fa-fw" aria-hidden="true"></i>
+			</div>
+			<div class="btn btn-default" id="DoFenfa" data-jobid="${job.id}"
 				title="進行分發，並且會清除以前分發的結果。保障名額不受影響。">
-				進行分發 <img src="./images/waiting.gif" id="waiting"
-					style="display: none"></img> <span id="status"></span>
+				進行分發 <i class="fa fa-refresh fa-spin fa-fw" aria-hidden="true"></i>
+				<span class="sr-only">Loading...</span> <span id="status"></span>
 			</div>
 			<div class="btn btn-default">
 				<a href="./Export.api?target=getResults_XLS&jobid=${job.id }"
@@ -235,8 +240,8 @@
 					<h4 class="panel-title">
 						<a class="collapsed" role="button" data-toggle="collapse"
 							data-parent="#accordion" href="#collapseTwo"
-							aria-expanded="false" aria-controls=" collapseTwo">
-							已經完成選填(共 ${fn:length(submittedelectives)} 人)： </a>
+							aria-expanded="false" aria-controls=" collapseTwo"> 已經完成選填(共
+							${fn:length(submittedelectives)} 人)： </a>
 					</h4>
 				</div>
 				<div id="collapseTwo" class="panel-collapse collapse"
@@ -295,7 +300,8 @@
 												src="images/lock_${nonfenfaedelective.lock}.jpg"
 												height="18px"></img></a>
 										</c:if> <c:if test="${nonfenfaedelective.lock==0}">
-											<a href="" electiveid="${nonfenfaedelective.id }" id="doLock">鎖定</a>
+											<a href="" electiveid="${nonfenfaedelective.id }" id="doLock"><i
+												class="fa fa-unlock" aria-hidden="true"></i></a>
 										</c:if> ｜ <a href="" id="deleteElective"
 										electiveid="${nonfenfaedelective.id}"
 										title="刪除：填錯的、不該填的、另有安排者。">刪除</a></td>
@@ -441,10 +447,10 @@
 								<td><c:if test="${elective.lock==1}">
 
 										<a href="" electiveid="${elective.id }" id="doUnlock"
-											title="解鎖"><img src="images/lock_${elective.lock}.jpg"
-											height="18px"></img></a>
+											title="解鎖"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></a>
 									</c:if> <c:if test="${elective.lock==0}">
-										<a href="" electiveid="${elective.id }" id="doLock">鎖定</a>
+										<a href="" electiveid="${elective.id }" id="doLock"><i
+											class="fa fa-unlock fa-lg" aria-hidden="true"></i></a>
 									</c:if></td>
 								<td><a href="" id="deleteElective"
 									electiveid="${nonfenfaedelective.id}"
