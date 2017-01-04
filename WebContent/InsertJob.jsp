@@ -4,8 +4,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ page isELIgnored="false"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
 <jsp:include page="includes/head.jsp" />
 
@@ -41,6 +41,16 @@
 				<input type="text" class="form-control" id="semester"
 					name="semester" value="${job.semester}" />
 			</div>
+			<div class="form-group">
+				<label for="max_choose">最多可選幾個志願：</label> <select
+					class="form-control" name="max_choose"
+					data-max_choose="${job.max_choose}">
+					<option value=2>2</option>
+					<option value=3>3</option>
+					<option value=4>4</option>
+				</select>
+			</div>
+
 			<div class="form-group">
 				<label for="allowedusers"> 有資格進入作業的學生清單： </label>
 				<p class="help-block">
@@ -86,13 +96,14 @@ ${coursecsv}</textarea>
 					<div class="col-md-12">
 						<c:forEach var="course" items="${courses}" varStatus="varstatus">
 							<div id="coursebox">
-								<input name="courseid" type="hidden" value="${course.id}" />
+								<input name="courseid" type="text" value="${course.id}" />
 								<div class="row">
 									<div class="col-md-5">
-										<span id="course_index">#${varstatus.count }</span>
+										<span id="course_index">#${varstatus.count }
+											${course.id}</span>
 										<div class="form-group">
 											<label for="coursename" class="col-sm-3 control-label">
-												課程名稱： </label>
+												課程名稱 ： </label>
 											<div class="col-sm-9">
 												<input type="text" class="form-control" id="coursename"
 													name="coursename" value="${course.name}" />
@@ -126,13 +137,13 @@ ${coursecsv}</textarea>
 									</div>
 									<div class="col-md-1">
 										<button type="button" class="btn btn-default"
-											id="removeCourse">
+											id="removeCourse" data-courseid="${course.id }">
 											<span class="glyphicon glyphicon-remove" title="移除本課程"></span>
 										</button>
 
 										<button type="button" class="btn btn-default"
 											id="duplicateCourse">
-											<span class="glyphicon glyphicon-plus" title="再製本課程"></span>
+											<span class="glyphicon glyphicon-duplicate" title="再製本課程"></span>
 										</button>
 									</div>
 

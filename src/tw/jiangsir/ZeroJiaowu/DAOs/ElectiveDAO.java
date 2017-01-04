@@ -113,7 +113,7 @@ public class ElectiveDAO extends SuperDAO<Elective> {
 		this.execute(sql);
 	}
 
-	public String printElective(Elective elective) {
+	private String printElective(Elective elective) {
 		String text = "";
 		text += "id=" + elective.getId();
 		text += "jobid=" + elective.getJobid() + "\n";

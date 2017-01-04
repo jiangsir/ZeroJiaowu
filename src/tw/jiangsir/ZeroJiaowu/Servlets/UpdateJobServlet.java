@@ -46,6 +46,8 @@ public class UpdateJobServlet extends HttpServlet {
 		job.setTitle(request.getParameter("title"));
 		job.setContent(request.getParameter("content"));
 		job.setSemester(Integer.parseInt(request.getParameter("semester")));
+		job.setMax_choose(Integer.parseInt(request.getParameter("max_choose")));
+
 		// String allowedusers_PRE = job.getAllowedusers();
 
 		job.setAllowedusers(request.getParameter("allowedusers"));
@@ -58,31 +60,42 @@ public class UpdateJobServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		new CourseDAO().deleteByJobid(job.getId());
-
+		// 20170104 不可刪除，否則前面選課過的人會全部失效。
+		// new CourseDAO().deleteByJobid(job.getId());
+		String[] courseids = request.getParameterValues("courseid");
 		String[] coursenames = request.getParameterValues("coursename");
 		String[] coursecontents = request.getParameterValues("coursecontent");
 		String[] teachers = request.getParameterValues("teacher");
 		String[] coursecapacitys = request.getParameterValues("coursecapacity");
-		for (int i = 0; i < coursenames.length; i++) {
+		for (int i = 0; i < courseids.length; i++) {
 			// System.out.println("coursenames.length=" + coursenames.length +
 			// ", courseids[i]=" + courseids[i]);
-			Course course = new Course();
-			// if (!"".equals(courseids[i])) {
-			// // course = new Course(Integer.valueOf(courseids[i]));
-			// course = new
-			// CourseDAO().getCourseById(Integer.valueOf(courseids[i]));
-			// }
-			course.setName(coursenames[i]);
-			course.setContent(coursecontents[i]);
-			course.setCapacity(Integer.valueOf(coursecapacitys[i]));
-			course.setTeacher(teachers[i]);
-			course.setJobid(jobid);
-			try {
-				new CourseDAO().insert(course);
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new DataException(e);
+
+			if (!"".equals(courseids[i])) { // 更新原有的。
+				// course = new Course(Integer.valueOf(courseids[i]));
+				Course course = new CourseDAO().getCourseById(Integer.valueOf(courseids[i]));
+				course.setName(coursenames[i]);
+				course.setContent(coursecontents[i]);
+				course.setCapacity(Integer.valueOf(coursecapacitys[i]));
+				course.setTeacher(teachers[i]);
+				course.setJobid(jobid);
+				try {
+					new CourseDAO().update(course);
+				} catch (Exception e) {
+					throw new DataException(e);
+				}
+			} else { // 建立新的 course
+				Course course = new Course();
+				course.setName(coursenames[i]);
+				course.setContent(coursecontents[i]);
+				course.setCapacity(Integer.valueOf(coursecapacitys[i]));
+				course.setTeacher(teachers[i]);
+				course.setJobid(jobid);
+				try {
+					new CourseDAO().insert(course);
+				} catch (Exception e) {
+					throw new DataException(e);
+				}
 			}
 		}
 

@@ -316,13 +316,11 @@ abstract public class SuperDAO<T> {
 		try {
 			stmt = conn.createStatement();
 			result = stmt.execute(sql);
-			System.out.println(
-					"PSTMT_SQL=" + stmt.toString() + " 共耗時 " + (System.currentTimeMillis() - starttime) + " ms");
-			// logger.info("PSTMT_SQL=" + stmt.toString() + " 共耗時 "
-			// + (System.currentTimeMillis() - starttime) + " ms");
+			// System.out.println("PSTMT_SQL=" + sql + " 共耗時 " +
+			// (System.currentTimeMillis() - starttime) + " ms");
+			logger.info("PSTMT_SQL=" + sql + " 共耗時 " + (System.currentTimeMillis() - starttime) + " ms");
 			stmt.close();
 			// conn.close();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;

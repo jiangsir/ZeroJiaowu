@@ -54,7 +54,7 @@ public class Elective {
 	@Persistent(name = "lock")
 	private Integer lock = LOCK_UNLOCKED;
 	@Persistent(name = "submittime")
-	private Timestamp submittime = new Timestamp(new Date().getTime());
+	private Timestamp submittime = new Timestamp(System.currentTimeMillis());
 	@Persistent(name = "ipfrom")
 	private String ipfrom = "";
 
@@ -272,6 +272,11 @@ public class Elective {
 	}
 	public Job getJob() {
 		return new JobDAO().getJobById(this.getJobid());
+	}
+
+	@Override
+	public String toString() {
+		return "" + this.getJobid() + ", " + this.getJob().getTitle();
 	}
 
 }

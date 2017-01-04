@@ -14,3 +14,11 @@ UPDATE electives SET courseid4=(SELECT id FROM courses WHERE name=electives.cour
 UPDATE electives SET selectedid=(SELECT id FROM courses WHERE name=electives.selected AND jobid=electives.jobid); 
 
 ALTER TABLE  `courses` DROP INDEX  `jobid`;
+
+ALTER TABLE  `electives` CHANGE  `course1`  `course1` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '';
+ALTER TABLE  `electives` CHANGE  `course2`  `course2` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '';
+ALTER TABLE  `electives` CHANGE  `course3`  `course3` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '';
+ALTER TABLE  `electives` CHANGE  `course4`  `course4` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '';
+ALTER TABLE  `electives` CHANGE  `selected`  `selected` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT  '';
+ALTER TABLE  `electives` CHANGE  `selected`  `selected` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  ''；
+

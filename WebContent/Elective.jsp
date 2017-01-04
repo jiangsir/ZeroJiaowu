@@ -4,34 +4,34 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ page isELIgnored="false"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
 <jsp:include page="includes/head.jsp" />
 
-<script language="javascript">
+<script type="text/javascript">
 	jQuery(document).ready(function() {
 		$("div[name=course]:first").show();
 
-		$("#course1").change(function() { //事件發生
+		$("#courseid1").change(function() { //事件發生
 			jQuery('option:selected', this).each(function() { //印出選到多個值
 				jQuery("div[name=course]").hide('slow');
 				jQuery("div[id=" + this.value + "]").show('slow');
 			});
 		});
-		$("#course2").change(function() { //事件發生
+		$("#courseid2").change(function() { //事件發生
 			jQuery('option:selected', this).each(function() { //印出選到多個值
 				jQuery("div[name=course]").hide('slow');
 				jQuery("div[id=" + this.value + "]").show('slow');
 			});
 		});
-		$("#course3").change(function() { //事件發生
+		$("#courseid3").change(function() { //事件發生
 			jQuery('option:selected', this).each(function() { //印出選到多個值
 				jQuery("div[name=course]").hide('slow');
 				jQuery("div[id=" + this.value + "]").show('slow');
 			});
 		});
-		$("#course4").change(function() { //事件發生
+		$("#courseid4").change(function() { //事件發生
 			jQuery('option:selected', this).each(function() { //印出選到多個值
 				jQuery("div[name=course]").hide('slow');
 				jQuery("div[id=" + this.value + "]").show('slow');
@@ -80,10 +80,10 @@
 											<h4>
 												<label for="item_a">第 ${i} 志願：</label>
 											</h4>
-											<select id="course${i}" name="course${i}"
+											<select id="courseid${i}" name="courseid${i}"
 												style="width: 100%; font-size: 1.5em;">
 												<c:forEach var="course" items="${job.courses}">
-													<option value="${course.name}">${course.name}(上限
+													<option value="${course.id}">${course.name}(上限
 														${course.capacity}人)</option>
 												</c:forEach>
 											</select>

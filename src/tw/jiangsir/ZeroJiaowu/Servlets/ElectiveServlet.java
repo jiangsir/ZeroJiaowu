@@ -150,18 +150,25 @@ public class ElectiveServlet extends HttpServlet {
 		// String session_account = (String) session
 		// .getAttribute("session_account");
 		Elective newelective = new Elective();
+		TreeSet<Integer> set = new TreeSet<Integer>();
 		newelective.setJobid(Integer.parseInt(request.getParameter("jobid")));
 		newelective.setAccount(currentUser.getAccount());
+
 		newelective.setCourseid1(Integer.parseInt(request.getParameter("courseid1")));
-		newelective.setCourseid2(Integer.parseInt(request.getParameter("courseid2")));
-		newelective.setCourseid3(Integer.parseInt(request.getParameter("courseid3")));
-		newelective.setCourseid4(Integer.parseInt(request.getParameter("courseid4")));
-		TreeSet<Integer> set = new TreeSet<Integer>();
 		set.add(newelective.getCourseid1());
-		set.add(newelective.getCourseid2());
-		set.add(newelective.getCourseid3());
-		set.add(newelective.getCourseid4());
-		if (set.size() < 4) {
+		if (newelective.getJob().getMax_choose() >= 2) {
+			newelective.setCourseid2(Integer.parseInt(request.getParameter("courseid2")));
+			set.add(newelective.getCourseid2());
+		}
+		if (newelective.getJob().getMax_choose() >= 3) {
+			newelective.setCourseid3(Integer.parseInt(request.getParameter("courseid3")));
+			set.add(newelective.getCourseid3());
+		}
+		if (newelective.getJob().getMax_choose() >= 4) {
+			newelective.setCourseid4(Integer.parseInt(request.getParameter("courseid4")));
+			set.add(newelective.getCourseid4());
+		}
+		if (set.size() < newelective.getJob().getMax_choose()) {
 			Message message = new Message();
 			message.setType(Message.getMessageType_ALERT());
 			message.setTitle("不可以選相同的課程！");
@@ -184,7 +191,8 @@ public class ElectiveServlet extends HttpServlet {
 			message.setTitle("選填發生問題！");
 			String plainText = "請將畫面列印下來，並洽教務處！<br>";
 			plainText += "錯誤訊息：";
-			plainText += new ElectiveDAO().printElective(newelective);
+			// plainText += new ElectiveDAO().printElective(newelective);
+			plainText += newelective.getResult();
 			message.setPlainText(plainText);
 
 			HashMap<String, String> links = new HashMap<String, String>();

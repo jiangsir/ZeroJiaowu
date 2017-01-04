@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import tw.jiangsir.Utils.Persistent;
 import tw.jiangsir.ZeroJiaowu.DAOs.CourseDAO;
 import tw.jiangsir.ZeroJiaowu.DAOs.ElectiveDAO;
+import tw.jiangsir.ZeroJiaowu.DAOs.JobDAO;
 
 /**
  *  - User.java
@@ -231,6 +232,10 @@ public class Course {
 	 */
 	public ArrayList<Course> getCourses() {
 		return new CourseDAO().getCoursesByJobid(jobid);
+	}
+
+	public Job getJob() {
+		return new JobDAO().getJobById(this.getJobid());
 	}
 
 	@Override

@@ -40,6 +40,7 @@ public class InsertJobServlet extends HttpServlet implements IAccessFilter {
 		job.setTitle(request.getParameter("title"));
 		job.setContent(request.getParameter("content"));
 		job.setSemester(Integer.parseInt(request.getParameter("semester")));
+		job.setMax_choose(Integer.parseInt(request.getParameter("max_choose")));
 		job.setAllowedusers(request.getParameter("allowedusers"));
 		job.setIpset(request.getParameter("ipset"));
 		job.setStarttime(request.getParameter("starttime"));

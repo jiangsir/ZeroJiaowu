@@ -9,6 +9,14 @@ jQuery(document).ready(
 				dateFormat : 'yy-mm-dd',
 				timeFormat : 'HH:mm:ss'
 			});
+			var select = $("select[name='max_choose']");
+			console.log("select.data('max_choose')="
+					+ select.data('max_choose'));
+			$(
+					"select[name='max_choose'] option[value="
+							+ select.data('max_choose') + "]").prop('selected',
+					true);
+			// $('.id_100 option[value=val2]').prop('selected', true);
 
 			jQuery("button[id=addcourse]").click(
 					function() {
@@ -35,28 +43,43 @@ jQuery(document).ready(
 
 			jQuery("button[id=duplicateCourse]").click(function() {
 				var coursebox = $(this).closest("div[id=coursebox]");
-				//alert(coursebox);
-				coursebox.clone(true).insertAfter(coursebox);
+				// alert(coursebox);
+				var clone = coursebox.clone(true);
+				clone.find("input[name=courseid]").val("");
+				clone.insertAfter(coursebox);
+
 				var count = 0;
 				jQuery("span[id='course_index']").each(function() {
 					$(this).html("#" + ++count);
 				});
 			});
 
-			jQuery("span[id='deleteCourse']").click(
+			jQuery("span[id='deleteCourse']").click(function() {
+				var courseid = $(this).attr('courseid');
+				// alert(courseid);
+				var coursebox = $(this).closest("div[id='coursebox']");
+				// alert(coursebox);
+			});
+
+			jQuery("button[id='removeCourse']").click(
 					function() {
-						var courseid = $(this).attr('courseid');
-						// alert(courseid);
-						var coursebox = $(this).closest("div[id='coursebox']");
-						// alert(coursebox);
+						var index = jQuery("button[id='removeCourse']").index(
+								this);
+						var size = jQuery("button[id='removeCourse']").size();
+						if (size > 1) {
+							var coursebox = $(this).closest(
+									"div[id='coursebox']");
+							coursebox.remove();
+						}
+						var count = 0;
+						jQuery("span[id='course_index']").each(function() {
+							$(this).html("#" + ++count);
+						});
 						jQuery.ajax({
 							type : "POST",
 							url : "./Course.do",
 							data : "action=" + "deleteCourse&" + "courseid="
-									+ courseid,
-							async : false, // 一般來說不該使用，因為用了會 waiting 會在
-							// ajax
-							// 執行完後才會出來。
+									+ $(this).data('courseid'),
 							timeout : 5000,
 							beforeSend : function() {
 							},
@@ -71,20 +94,7 @@ jQuery(document).ready(
 								// .remove();
 							} // success
 						});
+
 					});
-
-			jQuery("button[id='removeCourse']").bind('click', function() {
-				var index = jQuery("button[id='removeCourse']").index(this);
-				var size = jQuery("button[id='removeCourse']").size();
-				if (size > 1) {
-					var coursebox = $(this).closest("div[id='coursebox']");
-					coursebox.remove();
-				}
-				var count = 0;
-				jQuery("span[id='course_index']").each(function() {
-					$(this).html("#" + ++count);
-				});
-
-			});
 
 		});
