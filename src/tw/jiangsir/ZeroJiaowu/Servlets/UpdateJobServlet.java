@@ -71,7 +71,7 @@ public class UpdateJobServlet extends HttpServlet {
 			// System.out.println("coursenames.length=" + coursenames.length +
 			// ", courseids[i]=" + courseids[i]);
 
-			if (!"".equals(courseids[i])) { // 更新原有的。
+			if (!"".equals(courseids[i]) && !"0".equals(courseids[i])) { // 更新原有的。
 				// course = new Course(Integer.valueOf(courseids[i]));
 				Course course = new CourseDAO().getCourseById(Integer.valueOf(courseids[i]));
 				course.setName(coursenames[i]);

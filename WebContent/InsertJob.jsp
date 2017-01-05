@@ -98,11 +98,10 @@ ${coursecsv}</textarea>
 					<div class="col-md-12">
 						<c:forEach var="course" items="${courses}" varStatus="varstatus">
 							<div id="coursebox">
-								<input name="courseid" type="text" value="${course.id}" />
+								<input name="courseid" type="hidden" value="${course.id}" />
 								<div class="row">
 									<div class="col-md-5">
-										<span id="course_index">#${varstatus.count }
-											${course.id}</span>
+										<span id="course_index">#${varstatus.count } </span>
 										<div class="form-group">
 											<label for="coursename" class="col-sm-3 control-label">
 												課程名稱 ： </label>
