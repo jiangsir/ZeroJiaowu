@@ -11,37 +11,22 @@
 
 <script type="text/javascript">
 	jQuery(document).ready(function() {
-		$("div[name=course]:first").show();
-
-		$("#courseid1").change(function() { //事件發生
+		var courseboxs = jQuery("div[id='coursebox']");
+		courseboxs.hide();
+		//$("div[name=course]:first").show();
+		courseboxs.first().show();
+		$("select[id=selectcourse]").change(function() { //事件發生
 			jQuery('option:selected', this).each(function() { //印出選到多個值
-				jQuery("div[name=course]").hide('slow');
-			    console.log("this.value="+this.value);
-				jQuery("div[id=" + this.value + "]").show('slow');
+				courseboxs.hide('slow');
+				var value = this.value;
+				courseboxs.each(function() {
+					console.log($(this).data('courseid') + ", " + value);
+					if ($(this).data('courseid') == value) {
+						$(this).show('slow');
+					}
+				});
 			});
 		});
-		$("#courseid2").change(function() { //事件發生
-			jQuery('option:selected', this).each(function() { //印出選到多個值
-				jQuery("div[name=course]").hide('slow');
-                console.log("this.value="+this.value);
-				jQuery("div[id=" + this.value + "]").show('slow');
-			});
-		});
-		$("#courseid3").change(function() { //事件發生
-			jQuery('option:selected', this).each(function() { //印出選到多個值
-				jQuery("div[name=course]").hide('slow');
-                console.log("this.value="+this.value);
-				jQuery("div[id=" + this.value + "]").show('slow');
-			});
-		});
-		$("#courseid4").change(function() { //事件發生
-			jQuery('option:selected', this).each(function() { //印出選到多個值
-				jQuery("div[name=course]").hide('slow');
-                console.log("this.value="+this.value);
-				jQuery("div[id=" + this.value + "]").show('slow');
-			});
-		});
-
 	});
 </script>
 </head>
@@ -84,7 +69,7 @@
 											<h4>
 												<label for="item_a">第 ${i} 志願：</label>
 											</h4>
-											<select id="courseid${i}" name="courseid${i}"
+											<select id="selectcourse" name="courseid${i}"
 												style="width: 100%; font-size: 1.5em;">
 												<c:forEach var="course" items="${job.courses}">
 													<option value="${course.id}">${course.name}(上限
@@ -108,8 +93,7 @@
 						</div>
 						<div class="col-md-7">
 							<c:forEach var="course" items="${job.courses}">
-								<div name="course" id="${course.id}"
-									style="display: none; float: left;">
+								<div id="coursebox" data-courseid="${course.id}">
 									<h3>課程名稱：${course.name}</h3>
 									<br />
 									<h3>課程內容：</h3>
