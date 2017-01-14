@@ -458,7 +458,7 @@
 							<tr>
 								<td>${varstatus.count}</td>
 								<td>${elective.nth}th</td>
-								<td>${elective.account}<br />${elective.user.username}</td>
+								<td>${elective.account} ${elective.user.username}</td>
 								<td>${elective.course1.name}</td>
 								<td>${elective.course2.name}</td>
 								<td>${elective.course3.name}</td>
@@ -471,7 +471,7 @@
 											data-electiveid="${elective.id }"></i>
 									</c:if></td>
 								<td>
-									<button type="button" class="btn btn-default"
+									<button type="button" class="btn btn-default btn-xs"
 										id="deleteElective" data-electiveid="${elective.id}"
 										title="刪除：填錯的、不該填的、另有安排者。">
 										<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
